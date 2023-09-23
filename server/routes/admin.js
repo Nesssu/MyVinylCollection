@@ -36,6 +36,11 @@ router.post('/login/', (req, res, next) =>
 
   Admin.findOne({id}).exec().then(admin =>
     {
+      if (admin == null)
+      {
+        return res.json({success: false, message: "Invalid ID!"});
+      }
+
       bcrypt.compare(password, admin.password, (err, isMatch) =>
       {
         if (err) throw err;
@@ -46,7 +51,6 @@ router.post('/login/', (req, res, next) =>
           }
           jwt.sign(
             payload,
-            // TODO: Create a correct secure secret
             "bananaboat",
             {
               expiresIn: "4h"
@@ -67,7 +71,7 @@ router.post('/login/', (req, res, next) =>
 });
 
 // Update the admins password
-router.put('/update/password/', (req, res, next) =>
+router.put('/api/update/password/', (req, res, next) =>
 {
   return req.json({
     message: "Password is updated!"
@@ -75,41 +79,11 @@ router.put('/update/password/', (req, res, next) =>
 });
 
 // Update the admin id
-router.put('/update/id/', (req, res, next) =>
+router.put('/api/update/id/', (req, res, next) =>
 {
   return res.json({
     message: "Id is updated!"
   });
 });
-
-// Registration for the admin. 
-// TODO: Delete after the admin credentials are created.
-router.post('/register/', (req, res, next) =>
-{
-  const id = req.body.id;
-  const password = req.body.password;
-
-  bcrypt.genSalt(10, (err, salt) =>
-    {
-      bcrypt.hash(password, salt, (err, hash) =>
-      {
-        if (err) throw err;
-        Admin.create(
-          {
-            id: id,
-            password: hash,
-          })
-          .then((doc) =>
-          {
-            if (doc) return (res.json({success: true}))
-          })
-          .catch((err) =>
-          {
-            if (err) throw err
-          })
-      })
-    }
-  );
-})
 
 module.exports = router;

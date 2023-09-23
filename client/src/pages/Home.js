@@ -1,8 +1,9 @@
 import '../App.css';
 
-function Home() {
+const Home = () =>
+{
   return (
-    <div className="App">
+    <div className="Home">
       <div className="NavBar">
         My Vinyl Collection
       </div>

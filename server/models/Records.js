@@ -5,7 +5,10 @@ const Records = Schema;
 let recordsSchema = new Records ({
     artist: {type: String},
     title: {type: String},
-    about: {type: Text},
+    image: {type: String},
+    contentType: {type: String},
+    bio: {type: Text},
+    releaseDate: {type: Date},
     number: {type: Number}
 });
 

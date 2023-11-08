@@ -3,6 +3,50 @@ body
   width: 100%;
 }
 
+h1
+{
+  margin: 0;
+  padding: 5px;
+  font-size: xx-large;
+  font-family: 'Italianno', cursive;
+  font-weight: 100;
+  color: black;
+}
+
+h2
+{
+  margin: 0;
+  padding: 5px;
+  font-size: large;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+  color: black;
+}
+
+h3
+{
+  margin: 0;
+  padding: 5px;
+  font-size: medium;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+  color: black;
+}
+
+p
+{
+  margin: 0;
+  padding: 5px;
+  font-size: small;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+  color: black;
+}
+
+.NoScroll::-webkit-scrollbar {
+  display: none;
+}
+
 .Home
 {
   display: flex;
@@ -100,14 +144,17 @@ body
   border: solid;
   border-width: 1px;
   border-radius: 5px;
+  box-shadow: 0 0 5px #888;
   padding: 10px 15px 10px 15px;
   position: absolute;
   right: 10px;
+  transition: all 0.5s;
 }
 
 .DashboardLogoutButton:hover
 {
   cursor: pointer;
+  background-color: #dcdcdc;
 }
 
 .DashboardLogoutButton p
@@ -126,14 +173,234 @@ body
   margin: 0;
 }
 
-.DashboardTitle h1
+.AdminDashboardInput
 {
-  margin: 0;
-  padding: 5px;
-  font-size: xx-large;
-  font-family: 'Italianno', cursive;
-  font-weight: 100;
+  padding: 10px 15px 10px 15px;
+  width: 90%;
+  height: 25px;
+  max-width: 600px;
+  margin: 10px 0 10px 0;
+  
+  border: solid;
+  border-radius: 25px;
+  border-color: black;
+  border-width: 1px;
+  box-shadow: 0 0 5px #888;
+  outline: none;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+}
+
+.AdminDashboardMultiline
+{
+  padding: 15px 15px 15px 15px;
+  width: 250px;
+  height: 250px;
+  margin: 10px 0 10px 0;
+  
+  border: solid;
+  border-radius: 25px;
+  border-color: black;
+  border-width: 1px;
+  box-shadow: 0 0 5px #888;
+  outline: none;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+  resize: none;
+
+}
+
+.AdminDashboardButton
+{
+  background-color: white;
+  width: 90%;
+  height: 45px;
+  max-width: calc(600px + 30px);
+  padding: 10px 15px 10px 15px;
+  margin: 10px 0 10px 0;
+
+  border: solid;
+  border-radius: 25px;
+  border-color: black;
+  border-width: 1px;
+  box-shadow: 0 0 5px #888;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+
+  transition: all 0.5s;
+}
+
+.AdminDashboardButton:hover
+{
+  cursor: pointer;
+  background-color: #dcdcdc;
+}
+
+.AddAndUpdateArea
+{
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.AddArea
+{
+  width: 50vw;
+  height: 100%;
+
+  padding: 50px 0 0 0;
+  align-items: center;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.UpdateArea
+{
+  width: 50vw;
+  height: 100%;
+
+  padding: 50px 0 0 0;
+  align-items: center;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.ImageIcon {
   color: black;
+  font-size: 100px;
+  margin: 0;
+  padding: 0;
+  transition: all 0.5s;
+  position: absolute;
+}
+
+.ImageText
+{
+  color: #888;
+  font-size: 20px;
+  margin: 0;
+  padding: 0;
+  transition: all 0.5s;
+  position: absolute;
+  font-family: 'Fraunces', serif;
+  font-size: small;
+}
+
+.ChangeImageContainer {
+  padding: 15px 15px 15px 15px;
+  width: 250px;
+  height: 250px;
+  margin: 10px 0 10px 0;
+  border: solid;
+  border-radius: 25px;
+  border-color: black;
+  border-width: thin;
+  box-shadow: 0 0 5px #888;
+  background-size: cover;
+  background-position: center;
+  background-color: white;
+  transition: all 0.5s;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.ChangeImageContainer:hover {
+  cursor: pointer;
+}
+
+.ChangeImageContainer label:hover {
+  cursor: pointer;
+}
+
+.AdminCredentialsArea
+{
+  width: 100%;
+  height: 100%;
+
+  padding: 100px 0 100px 0;
+  align-items: center;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.AdminDashboardSearchBarBackground
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 15px 10px 15px;
+  width: 90%;
+  max-width: 600px;
+  min-height: 25px;
+  margin: 10px 0 10px 0;
+  
+  border: solid;
+  border-radius: 25px;
+  border-color: black;
+  border-width: 1px;
+  box-shadow: 0 0 5px #888;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+}
+
+.AdminDashboardSearchBar
+{
+  width: 100%;
+  height: 100%;
+  margin: 0 0 0 5px;
+
+  border: none;
+  outline: none;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+}
+
+.SearchBarIcon
+{
+  color: black;
+  font-size: x-large;
+}
+
+.HorizontalSeparator
+{
+  height: 1px;
+  width: 100%;
+  background-color: #888;
+  border: none;
+}
+
+.AdminDashboardSearchBarResultArea
+{
+  width: 100%;
+  height: 100%;
+  margin: 10px 0 5px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.AdminDashboardSearchBarResultItem
+{
+  display: flex;
+  width: 100%;
+  margin: 1px;
+}
+
+.AdminDashboardSearchBarResultItem:hover
+{
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 
@@ -189,7 +456,7 @@ body
 .LoginButton:hover
 {
   cursor: pointer;
-  background-color: #cacaca;
+  background-color: #dcdcdc;
 }
 
 .LoginTitle
@@ -197,3 +464,5 @@ body
   position: absolute;
   top: 25px;
 }
+
+

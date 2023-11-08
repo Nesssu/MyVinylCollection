@@ -86,4 +86,34 @@ router.put('/api/update/id/', (req, res, next) =>
   });
 });
 
+router.post('/validate_token/', (req, res, next) =>
+{
+  const token = req.body.token;
+  let id;
+
+  try
+  {
+    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    id = payload.id;
+  }
+  catch
+  {
+    return res.json({success: false});
+  }
+
+  Admin.findOne({id: id})
+  .then((admin) =>
+    {
+      if (admin)
+      {
+        return res.json({success: true});
+      }
+      else
+      {
+        return res.json({success: false});
+      }
+    }
+  );
+});
+
 module.exports = router;

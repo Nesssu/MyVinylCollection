@@ -8,6 +8,21 @@ data from the database.
 
 */
 
+// Middleware to authenticate that the user is actually the real admin
+const authenticateToken = (req, res, next) =>
+{
+  const token = req.headers['authorization'];
+  
+  if (token == null) return res.status(401).json({message: "Unauthorized"});
+
+  jwt.verify(token, 'bananaboat', (err, id) =>
+  {
+    console.log("Testing");
+    if (err) return res.status(401).json({message: "unauthorized"});
+
+    next();
+  })
+}
 
 // Get all the vinyl record data and pictures from the database.
 router.get('/record/all/', (req, res, next) =>
@@ -18,11 +33,38 @@ router.get('/record/all/', (req, res, next) =>
 });
 
 // Add new record to the database.
-router.post('/record/add/', (req, res, next) => 
+router.post('/add/new/record/', authenticateToken, (req, res, next) => 
 {
-  return res.json({
-    message: "New record added!"
-  });
+  const artist = req.body.artist;
+  const title = req.body.title;
+  const releaseDate = req.body.releaseDate;
+  const bio = req.body.bio;
+  //const image = req.body.image;
+
+  console.log(artist);
+  console.log(title);
+  console.log(releaseDate);
+  console.log(bio);
+  //console.log(image);
+
+  /*Records.create({
+    artist,
+    title,
+    releaseDate,
+    bio,
+    image,
+    contentType: "image/jpeg"
+  })
+  .then((doc) => 
+  {
+    return res.json({success: true, message: "Artist added!"})
+  })
+  .catch((err) =>
+  {
+    return res.status(402).json({success: false, message: "Error while adding artist!"})
+  });*/
+
+  return res.status(200).json({success: true, message: "Success"});
 });
 
 // Edit record by it's name and artist

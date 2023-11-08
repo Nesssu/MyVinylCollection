@@ -1,5 +1,5 @@
 import '../App.css';
-import { useEffect, useState } from "react"; 
+import { useState } from "react"; 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
@@ -53,16 +53,13 @@ const AdminLogin = (props) =>
       }
     )
   }
-
-  useEffect(() =>
+  const handleKeyDown = (event) =>
   {
-    const token = localStorage.getItem('my_vinyl_collection_auth_token');
-    if (token)
+    if (event.keyCode === 13)
     {
-      props.setJwt(token);
-      navigate('/admin/dashboard/');
+      login();
     }
-  }, [])
+  }
 
   return (
     <div className="AdminLogin">
@@ -71,7 +68,7 @@ const AdminLogin = (props) =>
       </div>
 
       <input type="Text" className="LoginInput" placeholder="ID" value={ID} onChange={handleIDChange} />
-      <input type="Password" className="LoginInput" placeholder="Password" value={Password} onChange={handlePasswordChange} />
+      <input type="Password" className="LoginInput" placeholder="Password" value={Password} onChange={handlePasswordChange} onKeyDown={handleKeyDown} />
       <input type="Button" className="LoginButton" Value="Login" onClick={login} />
 
       <ToastContainer/>

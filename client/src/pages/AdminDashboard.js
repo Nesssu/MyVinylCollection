@@ -299,7 +299,36 @@ const AdminDashboard = (props) =>
     }
     else
     {
-      // Send the new data to the server
+      const body = 
+      {
+        ID,
+        confirmedID
+      };
+
+      fetch('/api/admin/update/id/', {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "authorization": props.jwt
+        },
+        body: JSON.stringify(body)
+      })
+      .then(response => response.json())
+      .then(json => 
+        {
+          if (json.success)
+          {
+            showToast(json.message, "success");
+          }
+          else
+          {
+            showToast(json.message, "warning");
+          }
+        }
+      )
+
+      setID("");
+      setConfirmedID("");
     }
   }
   const handlePasswordUpdate = () =>
@@ -315,14 +344,45 @@ const AdminDashboard = (props) =>
     }
     else
     {
-      // Send the new data to the server
+      const body = 
+      {
+        password,
+        confirmedPassword
+      };
+
+      fetch('/api/admin/update/password/', {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            "authorization": props.jwt
+        },
+        body: JSON.stringify(body)
+      })
+      .then(response => response.json())
+      .then(json => 
+        {
+          if (json.success)
+          {
+            showToast(json.message, "success");
+          }
+          else
+          {
+            showToast(json.message, "warning");
+          }
+        }
+      )
+
+      setPassword("");
+      setConfirmedPassword("");
     }
   }
+
   const logout = () =>
   {
     localStorage.removeItem('my_vinyl_collection_auth_token');
     navigate("/admin/login");
   }
+
   const searchBarOnClick = (key) =>
   {
     

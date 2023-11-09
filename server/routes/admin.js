@@ -3,6 +3,7 @@ const router = express.Router();
 const Admin = require('../models/Admin');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const {body, validationResult} = require("express-validator");
 
 /*
 
@@ -14,16 +15,14 @@ admin credentials can be updated.
 // Middleware to authenticate that the user is actually the real admin
 const authenticateToken = (req, res, next) =>
 {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  
-  if (token == null) return res.status(401).send("Unauthorized");
+  const token = req.headers['authorization'];
+  if (token == null) return res.status(401).json({success: false, message: "unauthorized: null"});
 
-  jwt.verify(token, 'bananaboat', (err, user) =>
+  jwt.verify(token, 'bananaboat', (err, admin) =>
   {
-    if (err) return res.status(401).json({message: "unauthorized"});
+    if (err) return res.status(401).json({success: false, message: "unauthorized: incorrect"});
 
-    req.user = user;
+    req.admin = admin;
     next();
   })
 }
@@ -57,8 +56,14 @@ router.post('/login/', (req, res, next) =>
             },
             (err, token) =>
             {
-              if (err) throw err;
-              else return res.json({success: true, token});
+              if (err) 
+              {
+                throw err;
+              }
+              else 
+              {
+                return res.json({success: true, token});
+              }
             }
           )
         }
@@ -71,19 +76,69 @@ router.post('/login/', (req, res, next) =>
 });
 
 // Update the admins password
-router.put('/api/update/password/', (req, res, next) =>
+router.put('/update/password/', 
+  authenticateToken,
+  body('password').isStrongPassword({
+  minLength: 8,
+  minLowercase: 1,
+  minUppercase: 1,
+  minNumbers: 1,
+  minSymbols: 1
+}),
+(req, res, next) =>
 {
-  return req.json({
-    message: "Password is updated!"
+  const errors = validationResult(req);
+  if (!errors.isEmpty())
+  {
+    return res.json({success: false, message: "Password is not strong enough!"});
+  }
+
+  const password = req.body.password;
+  const confirmedPassword = req.body.confirmedPassword;
+
+  // Check that the passwords are the same. This check is also done in the client, but this is just to be sure.
+  if (password != confirmedPassword)
+  {
+    return res.json({success: false, message: "The passwords must be the same"});
+  }
+
+  bcrypt.genSalt(10, (err, salt) =>
+  {
+    bcrypt.hash(password, salt, (err, hash) =>
+    {
+      if (err) return res.json({success: false, message: "Password couldn't be updated because of an error!"});
+
+      const filter = { id: req.admin.id };
+      const update = { password: hash };
+
+      Admin.findOneAndUpdate(filter, update)
+        .then((docs) =>
+      {
+        return res.json({success: true, message: "Password updated succesfully!"});
+      })
+    })
   });
 });
 
 // Update the admin id
-router.put('/api/update/id/', (req, res, next) =>
+router.put('/update/id/', authenticateToken, (req, res, next) =>
 {
-  return res.json({
-    message: "Id is updated!"
-  });
+  const ID = req.body.ID;
+  const confirmedID = req.body.confirmedID;
+
+  if (ID !== confirmedID)
+  {
+    return res.json({success: false, message: "The IDs must be the same"});
+  }
+
+  filter = { id: req.admin.id };
+  update = { id: ID };
+
+  Admin.findOneAndUpdate(filter, update)
+    .then((docs) =>
+    {
+      return res.json({success: true, message: "The admin ID updated succesfully!"});
+    });
 });
 
 router.post('/validate_token/', (req, res, next) =>
@@ -91,29 +146,11 @@ router.post('/validate_token/', (req, res, next) =>
   const token = req.body.token;
   let id;
 
-  try
-  {
-    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-    id = payload.id;
-  }
-  catch
-  {
-    return res.json({success: false});
-  }
-
-  Admin.findOne({id: id})
-  .then((admin) =>
+    jwt.verify(token, 'bananaboat', (err, admin) =>
     {
-      if (admin)
-      {
-        return res.json({success: true});
-      }
-      else
-      {
-        return res.json({success: false});
-      }
-    }
-  );
+      if (err) return res.status(401).json({success: false});
+      if (admin) return res.json({success: true});
+    })
 });
 
 module.exports = router;

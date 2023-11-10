@@ -192,26 +192,6 @@ p
   font-family: 'Fraunces', serif;
 }
 
-.AdminDashboardMultiline
-{
-  padding: 15px 15px 15px 15px;
-  width: 250px;
-  height: 250px;
-  margin: 10px 0 10px 0;
-  
-  border: solid;
-  border-radius: 25px;
-  border-color: black;
-  border-width: 1px;
-  box-shadow: 0 0 5px #888;
-  outline: none;
-
-  font-size: small;
-  font-family: 'Fraunces', serif;
-  resize: none;
-
-}
-
 .AdminDashboardButton
 {
   background-color: white;
@@ -238,6 +218,36 @@ p
   cursor: pointer;
   background-color: #dcdcdc;
 }
+
+.RecordBottomArea
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 98%;
+  max-width: 630px; 
+}
+
+.RecordBottomInputArea
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 280px;
+  width: 280px;
+}
+
+.RecordBottomInputArea .AdminDashboardButton
+{
+  width: 100%;
+}
+
+.RecordBottomInputArea .AdminDashboardInput
+{
+  width: 250px;
+}
+
 
 .AddAndUpdateArea
 {
@@ -284,13 +294,12 @@ p
 .ImageText
 {
   color: #888;
-  font-size: 20px;
+  font-size: small;
   margin: 0;
   padding: 0;
   transition: all 0.5s;
   position: absolute;
   font-family: 'Fraunces', serif;
-  font-size: small;
 }
 
 .ChangeImageContainer {

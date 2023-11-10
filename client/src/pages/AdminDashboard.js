@@ -197,17 +197,17 @@ const Record = (props) =>
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": localStorage.getItem('my_vinyl_collection_auth_token')
+                "authorization": props.jwt
             },
             body: JSON.stringify(body)
         })
-        .then(response => response.json())
+        /*.then(response => response.json())
         .then(json => 
             {
               console.log(json);
                 //showToast(json.message, "success");
                 //else showToast(json.message, "warning");
-            })
+            })*/
         setTitle("");
         setArtist("");
         setReleaseDate("");
@@ -238,12 +238,10 @@ const Record = (props) =>
   return (
     <div style={{'width': '100%', 'display': 'flex', 'flexDirection': 'column', 'alignItems': 'center'}} >
       <h2>Add New Record</h2>
-      <input className='AdminDashboardInput' type='Text' placeholder='Title' value={title} onChange={handleTitleChange} />
       <input className='AdminDashboardInput' type='Text' placeholder='Artist' value={artist} onChange={handleArtistChange} />
-      <input className='AdminDashboardInput' type='Date' value={releaseDate} placeholder='Release Date' onChange={handleReleaseDateChange} />
-      <div style={{'display': 'flex', 'flexDirection': 'row', 'justifyContent': 'space-between', 'width': '98%', 'max-width': '630px'}} >
-        <textarea className='AdminDashboardMultiline NoScroll' placeholder='Bio' value={bio} onChange={handleBioChange} />
-        <div className='ChangeImageContainer'onClick={handleImageClick} onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} style={{backgroundImage: path && path}} >
+      <input className='AdminDashboardInput' type='Text' placeholder='Title' value={title} onChange={handleTitleChange} />
+      <div className='RecordBottomArea' >
+        <div className='ChangeImageContainer' onClick={handleImageClick} onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} style={{backgroundImage: path && path}} >
           <BiImageAdd className='ImageIcon' style={{opacity: hover ? "1" : "0" }} />
           {image === null && 
             (
@@ -252,8 +250,16 @@ const Record = (props) =>
           }
           <input type="file" style={{display: "none"}} onChange={handlePathChange} id="BrowseImages" ref={fileInputRef} />
         </div>
+        <div className='RecordBottomInputArea' >
+          <div>
+            <input className='AdminDashboardInput' style={{'margin': '0 0 10px 0'}} type='Date' value={releaseDate} placeholder='Release Date' onChange={handleReleaseDateChange} />
+            <input className='AdminDashboardInput' type='Number' placeholder='Number' />
+          </div>
+          <div>
+            <input className='AdminDashboardButton' style={{'margin': '10px 0 0 0'}} type='Button' value={props.update ? 'Update': 'Add'} onClick={addRecord} />
+          </div>
+        </div>
       </div>
-      <input className='AdminDashboardButton' type='Button' value={props.update ? 'Update': 'Add'} onClick={addRecord} />
     </div>
   )
 }
@@ -476,7 +482,7 @@ const AdminDashboard = (props) =>
         </div>
 
         <div className="AddArea">
-          <Record update={false} />
+          <Record update={false} jwt={props.jwt} />
 
           <div className="AdminCredentialsArea">
             <h2>Update Admin Credentials</h2>

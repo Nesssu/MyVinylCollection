@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require("jsonwebtoken");
 
 /*
 
@@ -12,14 +13,13 @@ data from the database.
 const authenticateToken = (req, res, next) =>
 {
   const token = req.headers['authorization'];
-  
-  if (token == null) return res.status(401).json({message: "Unauthorized"});
+  if (token === null || token === undefined) return res.status(401).json({success: false, message: "unauthorized: null"});
 
-  jwt.verify(token, 'bananaboat', (err, id) =>
+  jwt.verify(token, 'bananaboat', (err, admin) =>
   {
-    console.log("Testing");
-    if (err) return res.status(401).json({message: "unauthorized"});
+    if (err) return res.status(401).json({success: false, message: "unauthorized: incorrect"});
 
+    req.admin = admin;
     next();
   })
 }
@@ -39,13 +39,13 @@ router.post('/add/new/record/', authenticateToken, (req, res, next) =>
   const title = req.body.title;
   const releaseDate = req.body.releaseDate;
   const bio = req.body.bio;
-  //const image = req.body.image;
+  const image = req.body.image;
 
   console.log(artist);
   console.log(title);
   console.log(releaseDate);
   console.log(bio);
-  //console.log(image);
+  console.log(image);
 
   /*Records.create({
     artist,

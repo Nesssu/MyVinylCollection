@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const Records = require('../models/Records');
 
 /*
 
@@ -38,33 +39,25 @@ router.post('/add/new/record/', authenticateToken, (req, res, next) =>
   const artist = req.body.artist;
   const title = req.body.title;
   const releaseDate = req.body.releaseDate;
-  const bio = req.body.bio;
+  const number = req.body.number;
   const image = req.body.image;
 
-  console.log(artist);
-  console.log(title);
-  console.log(releaseDate);
-  console.log(bio);
-  console.log(image);
-
-  /*Records.create({
-    artist,
-    title,
-    releaseDate,
-    bio,
-    image,
+  Records.create({
+    artist: artist,
+    title: title,
+    releaseDate: releaseDate,
+    number: number,
+    image: image,
     contentType: "image/jpeg"
   })
   .then((doc) => 
   {
-    return res.json({success: true, message: "Artist added!"})
+    return res.json({success: true, message: "Record added!"})
   })
   .catch((err) =>
   {
-    return res.status(402).json({success: false, message: "Error while adding artist!"})
-  });*/
-
-  return res.status(200).json({success: true, message: "Success"});
+    return res.status(402).json({success: false, message: "Error while adding the record!"})
+  });
 });
 
 // Edit record by it's name and artist

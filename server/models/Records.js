@@ -1,14 +1,14 @@
-import { Schema, model } from "mongoose";
+const mongoose = require("mongoose");
 
-const Records = Schema;
+const Records = mongoose.Schema;
 
 let recordsSchema = new Records ({
     artist: {type: String},
     title: {type: String},
     image: {type: String},
     contentType: {type: String},
-    releaseDate: {type: Date},
-    number: {type: Number}
+    releaseDate: {type: String},
+    number: {type: String}
 });
 
-export default model("record", recordsSchema);
+module.exports = mongoose.model("record", recordsSchema);

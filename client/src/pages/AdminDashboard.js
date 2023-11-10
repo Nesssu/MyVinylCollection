@@ -138,8 +138,8 @@ const Record = (props) =>
 {
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
-  const [releaseDate, setReleaseDate] = useState("");
-  const [bio, setBio] = useState("");
+  const [releaseDate, setReleaseDate] = useState(Date);
+  const [number, setNumber] = useState("");
   const [path, setPath] = useState(null);
   const [image, setImage] = useState(null);
   const [hover, setHover] = useState(false);
@@ -157,9 +157,9 @@ const Record = (props) =>
   {
     setReleaseDate(event.target.value);
   }
-  const handleBioChange = (event) =>
+  const handleNumberChange = (event) =>
   {
-    setBio(event.target.value);
+    setNumber(event.target.value);
   }
 
   const handleImageClick = () => 
@@ -183,13 +183,13 @@ const Record = (props) =>
   }
   const addRecord = () =>
   {
-    if (title !== "" && artist !== "" && releaseDate !== "" && bio !== "" && image !== null)
+    if (title !== "" && artist !== "" && releaseDate !== "" && number !== "" && image !== null)
     {
         const body = {
             title,
             artist,
             releaseDate,
-            bio,
+            number,
             image
         };
 
@@ -201,17 +201,22 @@ const Record = (props) =>
             },
             body: JSON.stringify(body)
         })
-        /*.then(response => response.json())
+        .then(response => response.json())
         .then(json => 
             {
-              console.log(json);
-                //showToast(json.message, "success");
-                //else showToast(json.message, "warning");
-            })*/
+              if (json.success)
+              {
+                showToast(json.message, "success");
+              }
+              else
+              {
+                showToast(json.message, "warning");
+              }
+            })
         setTitle("");
         setArtist("");
         setReleaseDate("");
-        setBio("");
+        setNumber("");
         setImage(null);
         setPath(null);
     }
@@ -228,7 +233,7 @@ const Record = (props) =>
       setArtist(props.artist);
       setTitle(props.title);
       setReleaseDate(props.releaseDate);
-      setBio(props.bio);
+      setNumber(props.number);
       setImage(props.image);
     }
   }, [props, image])
@@ -253,7 +258,7 @@ const Record = (props) =>
         <div className='RecordBottomInputArea' >
           <div>
             <input className='AdminDashboardInput' style={{'margin': '0 0 10px 0'}} type='Date' value={releaseDate} placeholder='Release Date' onChange={handleReleaseDateChange} />
-            <input className='AdminDashboardInput' type='Number' placeholder='Number' />
+            <input className='AdminDashboardNumber' type='Number' placeholder='Number' value={number} onChange={handleNumberChange} />
           </div>
           <div>
             <input className='AdminDashboardButton' style={{'margin': '10px 0 0 0'}} type='Button' value={props.update ? 'Update': 'Add'} onClick={addRecord} />

@@ -192,6 +192,35 @@ p
   font-family: 'Fraunces', serif;
 }
 
+.AdminDashboardNumber
+{
+  padding: 10px 15px 10px 15px;
+  width: 90%;
+  height: 25px;
+  max-width: 600px;
+  margin: 10px 0 10px 0;
+  
+  border: solid;
+  border-radius: 25px;
+  border-color: black;
+  border-width: 1px;
+  box-shadow: 0 0 5px #888;
+  outline: none;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+}
+
+.AdminDashboardNumber::-webkit-outer-spin-button,
+.AdminDashboardNumber::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.AdminDashboardNumber[type=number] {
+  -moz-appearance: textfield;
+}
+
 .AdminDashboardButton
 {
   background-color: white;

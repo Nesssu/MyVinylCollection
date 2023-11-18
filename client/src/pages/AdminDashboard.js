@@ -245,26 +245,18 @@ const Record = (props) =>
       <h2>Add New Record</h2>
       <input className='AdminDashboardInput' type='Text' placeholder='Artist' value={artist} onChange={handleArtistChange} />
       <input className='AdminDashboardInput' type='Text' placeholder='Title' value={title} onChange={handleTitleChange} />
-      <div className='RecordBottomArea' >
-        <div className='ChangeImageContainer' onClick={handleImageClick} onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} style={{backgroundImage: path && path}} >
-          <BiImageAdd className='ImageIcon' style={{opacity: hover ? "1" : "0" }} />
-          {image === null && 
-            (
-              <p style={{opacity: hover ? "0": "1"}} className='ImageText' >Image of the Record</p>
-            )
-          }
-          <input type="file" style={{display: "none"}} onChange={handlePathChange} id="BrowseImages" ref={fileInputRef} />
-        </div>
-        <div className='RecordBottomInputArea' >
-          <div>
-            <input className='AdminDashboardInput' style={{'margin': '0 0 10px 0'}} type='Date' value={releaseDate} placeholder='Release Date' onChange={handleReleaseDateChange} />
-            <input className='AdminDashboardNumber' type='Number' placeholder='Number' value={number} onChange={handleNumberChange} />
-          </div>
-          <div>
-            <input className='AdminDashboardButton' style={{'margin': '10px 0 0 0'}} type='Button' value={props.update ? 'Update': 'Add'} onClick={addRecord} />
-          </div>
-        </div>
+      <input className='AdminDashboardInput' type='Date' value={releaseDate} placeholder='Release Date' onChange={handleReleaseDateChange} />
+      <input className='AdminDashboardInput' type='Number' placeholder='Number' value={number} onChange={handleNumberChange} />
+      <div className='ChangeImageContainer' onClick={handleImageClick} onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} style={{backgroundImage: path && path}} >
+        <BiImageAdd className='ImageIcon' style={{opacity: hover ? "1" : "0" }} />
+        {image === null && 
+          (
+            <p style={{opacity: hover ? "0": "1"}} className='ImageText' >Image of the Record</p>
+          )
+        }
+        <input type="file" style={{display: "none"}} onChange={handlePathChange} id="BrowseImages" ref={fileInputRef} />
       </div>
+      <input className='AdminDashboardButton' style={{'margin': '10px 0 0 0'}} type='Button' value={props.update ? 'Update': 'Add'} onClick={addRecord} />
     </div>
   )
 }
@@ -401,39 +393,6 @@ const AdminDashboard = (props) =>
 
   useEffect(() =>
   {
-    const token = localStorage.getItem('my_vinyl_collection_auth_token');
-    if (token)
-    {
-      const body = {
-        token
-      };
-
-      fetch('/api/admin/validate_token/', {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body)
-      })
-      .then(response => response.json())
-      .then(json => 
-        {
-          if (json.success)
-          {
-            props.setJwt(token);
-          }
-          else
-          {
-            navigate("/admin/login");
-          }
-        }
-      );
-    }
-    else
-    {
-      navigate("/admin/login");
-    }
-
     // Get all the records from the db.
     setRecords([
       {
@@ -471,9 +430,7 @@ const AdminDashboard = (props) =>
           <h1>Admin Dashboard</h1>
         </div>
 
-        <div className="DashboardLogoutButton" onClick={logout}>
-          <p>Log Out</p>
-        </div>
+        <input type="Button" value="Log Out" className="DashboardLogoutButton" onClick={logout} />
       </div>
 
       <div className="AddAndUpdateArea">

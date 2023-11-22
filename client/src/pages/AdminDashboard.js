@@ -165,7 +165,19 @@ const Record = (props) =>
   const [hover, setHover] = useState(false);
   const [contentType, setContentType] = useState("");
   const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [isFirstTime, setIsFirstTime] = useState(true);
   const fileInputRef = useRef(null);
+
+  const checkUpdate = () =>
+  {
+    if (title != titleHistory) return true;
+    if (artist != artistHistory) return true;
+    if (releaseDate != releaseDateHistory) return true;
+    if (number != numberHistory) return true;
+    if (image != imageHistory) return true;
+
+    return false;
+  }
 
   const handleTitleChange = (event) =>
   {
@@ -288,10 +300,12 @@ const Record = (props) =>
       }
     );
   }
-
   useEffect(() =>
   {
-    if (props.update)
+  }, [title, artist, releaseDate, number, image])
+  useEffect(() =>
+  {
+    if (props.update && isFirstTime)
     {
       setArtist(props.artist);
       setTitle(props.title);
@@ -305,10 +319,10 @@ const Record = (props) =>
       setReleaseDateHistory(props.releaseDate);
       setNumberHistory(props.number);
       setImageHistory(props.image);
+
+      setIsFirstTime(false);
     }
-  }, [props, image])
-
-
+  }, [props, title, artist, image, releaseDate, number]);
 
   return (
     <div style={{'width': '100%', 'display': 'flex', 'flexDirection': 'column', 'alignItems': 'center'}} >
@@ -342,7 +356,14 @@ const Record = (props) =>
               
             />
             <input className='AdminDashboardButton' type='Button' value='Delete' onClick={() => setDeleteDialogVisible(true)} style={{backgroundColor: '#922724', color: 'white', margin: '10px 10px 10px 0'}} />
-            <input className='AdminDashboardButton' type='Button' value='Save' onClick={updateRecord} style={{margin: '10px 0 10px 10px'}} />
+            {checkUpdate() ?
+            (
+              <input className='AdminDashboardButton' type='Button' value='Save' onClick={updateRecord} style={{margin: '10px 0 10px 10px'}} />
+            )
+            :
+            (
+              <input className='AdminDashboardButton' type='Button' value='Close' onClick={() => { props.setSelectedRecord({}); props.setShowUpdate(false); }} style={{margin: '10px 0 10px 10px'}} />
+            )}
           </div>
         )
         :

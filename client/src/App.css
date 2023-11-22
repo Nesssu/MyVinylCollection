@@ -10,7 +10,7 @@ h1
   font-size: xx-large;
   font-family: 'Italianno', cursive;
   font-weight: 100;
-  color: black;
+  color: white;
 }
 
 h2
@@ -20,7 +20,8 @@ h2
   font-size: large;
   font-family: 'Fraunces', serif;
   font-weight: lighter;
-  color: black;
+  color: white;
+  text-decoration: underline;
 }
 
 h3
@@ -30,7 +31,7 @@ h3
   font-size: medium;
   font-family: 'Fraunces', serif;
   font-weight: lighter;
-  color: black;
+  color: white;
 }
 
 p
@@ -111,6 +112,73 @@ p
   text-align: center;
 }
 
+.ConfirmDialog {
+  background-color: white;
+  padding: 20px;
+  
+  border: none;
+  border-radius: 10px;
+
+  font-size: normal;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+  color: black;
+}
+
+.ConfirmDialogAccept {
+  background-color: #922724;
+  color: white;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+
+  border: none;
+  border-radius: 10px;
+
+  padding: 10px 20px 10px 20px;
+  margin: 20px 0 0 5px;
+
+  transition: all 0.5s;
+}
+
+.ConfirmDialogAccept:hover {
+  cursor: pointer;
+  border-radius: 25px;
+}
+
+.ConfirmDialogReject {
+  background-color: #e1e1e1;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+
+  border: none;
+  border-radius: 10px;
+
+  padding: 10px 20px 10px 20px;
+  margin: 20px 5px 0 0;
+
+  transition: all 0.5s;
+}
+
+.ConfirmDialogReject:hover {
+  cursor: pointer;
+  border-radius: 25px;
+}
+
+.ToastContainer {
+  background-color: white;
+  color: black;
+
+  font-size: normal;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+
+  border: none;
+  border-radius: 10px;
+}
 
 
 
@@ -123,6 +191,12 @@ p
   flex-direction: column;
   align-items: center;
   width: 100%;
+
+  background-image: url('../src/media/admin_dashboard_background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
 }
 
 .DashboardHeaderArea
@@ -139,8 +213,7 @@ p
 {
   font-size: small;
   font-family: 'Fraunces', serif;
-  font-weight: bold;
-  color: white;
+  color: black;
 
   margin: 0 25px 0 0;
   display: flex;
@@ -148,9 +221,8 @@ p
   justify-content: center;
   height: 45px;
   border: none;
-  border-radius: 25px;
-  box-shadow: 0 0 5px #888;
-  background-color: #318CE7;
+  border-radius: 10px;
+  background-color: white;
   padding: 10px 25px 10px 25px;
   position: absolute;
   right: 10px;
@@ -160,7 +232,7 @@ p
 .DashboardLogoutButton:hover
 {
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 25px;
 }
 
 .DashboardTitle
@@ -176,15 +248,12 @@ p
   padding: 10px 15px 10px 15px;
   width: 50%;
   height: 25px;
-  max-width: 600px;
+  max-width: 350px;
   min-width: 100px;
-  margin: 10px 0 10px 0;
+  margin: 5px 0 5px 0;
   
-  border: solid;
-  border-radius: 25px;
-  border-color: black;
-  border-width: 1px;
-  box-shadow: 0 0 5px #888;
+  border: none;
+  border-radius: 10px;
   outline: none;
 
   font-size: small;
@@ -203,22 +272,21 @@ p
 
 .AdminDashboardButton
 {
-  background-color: #318CE7;
+  background-color: white;
   width: calc(50% + 30px);
   height: 45px;
-  max-width: calc(600px + 30px);
-  min-width: calc(100px + 30px);
+  max-width: calc(350px + 30px);
+  min-width: calc(50px + 30px);
   padding: 10px 15px 10px 15px;
-  margin: 10px 0 10px 0;
+  margin: 5px 0 5px 0;
 
   border: none;
-  border-radius: 25px;
-  box-shadow: 0 0 5px #888;
+  border-radius: 10px;
 
   font-size: small;
+  font-weight: normal;
   font-family: 'Fraunces', serif;
-  font-weight: bold;
-  color: white;
+  color: #123524;
 
   transition: all 0.5s;
 }
@@ -226,7 +294,7 @@ p
 .AdminDashboardButton:hover
 {
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 25px;
 }
 
 .RecordBottomArea
@@ -273,7 +341,7 @@ p
   width: 50vw;
   height: 100%;
 
-  padding: 50px 0 0 0;
+  padding: 0;
   align-items: center;
 
   display: flex;
@@ -285,7 +353,7 @@ p
   width: 50vw;
   height: 100%;
 
-  padding: 50px 0 0 0;
+  padding: 0;
   align-items: center;
 
   display: flex;
@@ -315,14 +383,12 @@ p
 .ChangeImageContainer {
   padding: 15px 15px 15px 15px;
   width: 50%;
+  max-width: 350px;
   height: auto;
   aspect-ratio: 1/1;
-  margin: 10px 0 10px 0;
-  border: solid;
-  border-radius: 25px;
-  border-color: black;
-  border-width: thin;
-  box-shadow: 0 0 5px #888;
+  margin: 5px 0 5px 0;
+  border: none;
+  border-radius: 10px;
   background-size: cover;
   background-position: center;
   background-color: white;
@@ -360,18 +426,18 @@ p
   padding: 10px 15px 10px 15px;
   width: 50%;
   min-width: 100px;
-  max-width: 600px;
+  max-width: 350px;
   min-height: 25px;
-  margin: 10px 0 10px 0;
+  margin: 50px 0 10px 0;
+  background-color: white;
   
-  border: solid;
-  border-radius: 25px;
-  border-color: black;
-  border-width: 1px;
-  box-shadow: 0 0 5px #888;
+  border: none;
+  border-radius: 10px;
 
   font-size: small;
   font-family: 'Fraunces', serif;
+
+  position: absolute;
 }
 
 .AdminDashboardSearchBar
@@ -389,7 +455,7 @@ p
 
 .SearchBarIcon
 {
-  color: black;
+  color: #888;
   font-size: x-large;
 }
 
@@ -438,38 +504,46 @@ p
   justify-content: center;
   width: 100vw;
   height: 100vh;  
+
+  background-image: url('../src/media/admin_dashboard_background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
 }
 
 .LoginInput
 {
-  padding: 10px;
-  border: solid;
-  border-color: black;
-  border-radius: 25px;
-  border-width: 1px;
-
-  width: 300px;
   text-align: center;
+  font-size: small;
+  font-family: 'Fraunces', serif;
+
+  padding: 10px 15px 10px 15px;
+  width: 50%;
+  height: 25px;
+  width: 300px;
   margin: 10px 0 10px 0;
   
-  font-size: normal;
-  font-family: 'Fraunces', serif;
+  border: none;
+  border-radius: 5px;
+  outline: none;
 }
 
 .LoginButton
 {
-  padding: 10px 30px 10px 30px;
-  border: solid;
-  border-color: black;
-  border-radius: 25px;
-  border-width: 1px;
-
-  text-align: center;
-  margin: 10px 0 10px 0;
   background-color: white;
-  
-  font-size: normal;
+  height: 45px;
+  width: 100px;
+  padding: 10px 15px 10px 15px;
+  margin: 10px 0 10px 0;
+
+  border: none;
+  border-radius: 5px;
+
+  font-size: small;
   font-family: 'Fraunces', serif;
+  text-align: center;
+  color: black;
 
   transition: all 0.5s;
 }
@@ -477,7 +551,7 @@ p
 .LoginButton:hover
 {
   cursor: pointer;
-  background-color: #dcdcdc;
+  border-radius: 15px;
 }
 
 .LoginTitle

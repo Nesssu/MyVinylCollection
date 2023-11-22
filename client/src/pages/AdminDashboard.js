@@ -5,6 +5,7 @@ import { BiImageAdd } from 'react-icons/bi';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ConfirmDialog } from 'primereact/confirmdialog';
 
 const showToast = (message, type) =>
   {
@@ -18,7 +19,9 @@ const showToast = (message, type) =>
               pauseOnHover: false,
               draggable: false,
               progress: undefined,
-              theme: "dark",
+              theme: "light",
+              bodyClassName: "ToastContainer",
+              style: {borderRadius: "10px"}
               }
           );
       }
@@ -33,6 +36,8 @@ const showToast = (message, type) =>
               draggable: false,
               progress: undefined,
               theme: "light",
+              bodyClassName: "ToastContainer",
+              style: {borderRadius: "10px"}
               }
           );
       }
@@ -52,7 +57,7 @@ const SearchResultItem = (props) =>
   }, [props])
 
   return (
-    <div className='AdminDashboardSearchBarResultItem' onClick={() => props.searchBarOnClick(itemKey)} >
+    <div className='AdminDashboardSearchBarResultItem' onClick={() => {props.searchBarOnClick(itemKey); props.setClearSearch(true);}} >
       <p>{artist} - {album}</p>
     </div>
   );
@@ -63,6 +68,7 @@ const SearchBar = (props) =>
   const [search, setSearch] = useState("");
   const [filtered, setFiltered] = useState([]);
   const [found, setFound] = useState(false);
+  const [clearSearch, setClearSearch] = useState(false);
   
   const handleSearchChange = (event) =>
   {
@@ -107,15 +113,21 @@ const SearchBar = (props) =>
 
   useEffect(() =>
   {
-    
-  }, [props, found, filtered])
+    if (clearSearch)
+    {
+      setFiltered([]);
+      setFound(false);
+      setSearch("");
+      setClearSearch(false);
+    }
+  }, [found, filtered, clearSearch]);
 
 
   return (
     <div className='AdminDashboardSearchBarBackground' >
       <div style={{'display': 'flex', 'flexDirection': 'row', 'alignItems': 'center'}} >
         <AiOutlineSearch className='SearchBarIcon' />
-        <input className='AdminDashboardSearchBar' type='Text' placeholder='Search by artists or albums name' onKeyDown={handleKeyDown} onChange={handleSearchChange} />
+        <input className='AdminDashboardSearchBar' type='Text' placeholder='Search by artists or albums name' onKeyDown={handleKeyDown} onChange={handleSearchChange} value={search} />
       </div>
       {
         found &&
@@ -124,7 +136,7 @@ const SearchBar = (props) =>
             <div className='HorizontalSeparator' />
             {
               filtered.map(record =>  (
-                <SearchResultItem artist={record.artist} album={record.title} itemKey={record.id} searchBarOnClick={props.searchBarOnClick} />
+                <SearchResultItem key={record._id} artist={record.artist} album={record.title} itemKey={record.number} searchBarOnClick={props.searchBarOnClick} setClearSearch={setClearSearch} />
               ))
             }
           </div> 
@@ -136,13 +148,23 @@ const SearchBar = (props) =>
 
 const Record = (props) =>
 {
+  // The real data of the record
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
   const [releaseDate, setReleaseDate] = useState(Date);
   const [number, setNumber] = useState("");
-  const [path, setPath] = useState(null);
   const [image, setImage] = useState(null);
+
+  // History of the records data to keep track if it has changed
+  const [titleHistory, setTitleHistory] = useState("");
+  const [artistHistory, setArtistHistory] = useState("");
+  const [releaseDateHistory, setReleaseDateHistory] = useState(Date);
+  const [numberHistory, setNumberHistory] = useState("");
+  const [imageHistory, setImageHistory] = useState(null);
+
   const [hover, setHover] = useState(false);
+  const [contentType, setContentType] = useState("");
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleTitleChange = (event) =>
@@ -175,7 +197,6 @@ const Record = (props) =>
         const reader = new FileReader();
         reader.onload = function(e)
         {
-            setPath(`url(${e.target.result})`);
             setImage(reader.result.replace("data:", "").replace(/^.+,/, ""));
         }
         reader.readAsDataURL(file);
@@ -218,12 +239,54 @@ const Record = (props) =>
         setReleaseDate("");
         setNumber("");
         setImage(null);
-        setPath(null);
     }
     else
     {
       showToast("All the inputs must be filled", "warning");
     }
+  }
+  const updateRecord = () =>
+  {
+    // Send the updated data to the database
+
+
+    // Close the update view
+    props.setSelectedRecord({});
+    props.setShowUpdate(false);
+  }
+  const deleteRecord = () =>
+  {
+    setDeleteDialogVisible(false);
+
+    // Delete the record based on the id.
+    const body = {
+      number
+    }
+
+    fetch('/api/record/delete',
+    {
+      method: "DELETE",
+      headers: {
+          "Content-Type": "application/json",
+          "authorization": props.jwt
+      },
+      body: JSON.stringify(body)
+    })
+    .then(response => response.json())
+    .then(json => 
+      {
+        if (json.success)
+        {
+          showToast(json.message, "success");
+          props.setShowUpdate(false);
+          props.setSelectedRecord({});
+        }
+        else
+        {
+          showToast(json.message, "warning");
+        }
+      }
+    );
   }
 
   useEffect(() =>
@@ -235,6 +298,13 @@ const Record = (props) =>
       setReleaseDate(props.releaseDate);
       setNumber(props.number);
       setImage(props.image);
+      setContentType(props.contentType);
+
+      setArtistHistory(props.artist);
+      setTitleHistory(props.title);
+      setReleaseDateHistory(props.releaseDate);
+      setNumberHistory(props.number);
+      setImageHistory(props.image);
     }
   }, [props, image])
 
@@ -242,12 +312,16 @@ const Record = (props) =>
 
   return (
     <div style={{'width': '100%', 'display': 'flex', 'flexDirection': 'column', 'alignItems': 'center'}} >
-      <h2>Add New Record</h2>
+      {!props.update && 
+        (
+          <h2>Add New Record</h2>
+        )
+      }
       <input className='AdminDashboardInput' type='Text' placeholder='Artist' value={artist} onChange={handleArtistChange} />
       <input className='AdminDashboardInput' type='Text' placeholder='Title' value={title} onChange={handleTitleChange} />
       <input className='AdminDashboardInput' type='Date' value={releaseDate} placeholder='Release Date' onChange={handleReleaseDateChange} />
       <input className='AdminDashboardInput' type='Number' placeholder='Number' value={number} onChange={handleNumberChange} />
-      <div className='ChangeImageContainer' onClick={handleImageClick} onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} style={{backgroundImage: path && path}} >
+      <div className='ChangeImageContainer' onClick={handleImageClick} onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} style={{backgroundImage: image && `url(data:${contentType};base64,${image})`}} >
         <BiImageAdd className='ImageIcon' style={{opacity: hover ? "1" : "0" }} />
         {image === null && 
           (
@@ -256,7 +330,26 @@ const Record = (props) =>
         }
         <input type="file" style={{display: "none"}} onChange={handlePathChange} id="BrowseImages" ref={fileInputRef} />
       </div>
-      <input className='AdminDashboardButton' style={{'margin': '10px 0 0 0'}} type='Button' value={props.update ? 'Update': 'Add'} onClick={addRecord} />
+      {
+        props.update ?
+        (
+          <div style={{width: 'calc(50% + 30px)', maxWidth: '380px', minWidth: '100px', display: 'flex', flexDirection: 'row'}}>
+            <ConfirmDialog className='ConfirmDialog' acceptClassName='ConfirmDialogAccept' rejectClassName='ConfirmDialogReject' 
+              visible={deleteDialogVisible} onHide={() => setDeleteDialogVisible(false)} message="Are you sure you want to delete the record" 
+              header="Confirmation" icon="pi pi-exclamation-triangle" 
+              accept={deleteRecord} acceptLabel='Delete' 
+              reject={() => setDeleteDialogVisible(false)} rejectLabel='Cancel'
+              
+            />
+            <input className='AdminDashboardButton' type='Button' value='Delete' onClick={() => setDeleteDialogVisible(true)} style={{backgroundColor: '#922724', color: 'white', margin: '10px 10px 10px 0'}} />
+            <input className='AdminDashboardButton' type='Button' value='Save' onClick={updateRecord} style={{margin: '10px 0 10px 10px'}} />
+          </div>
+        )
+        :
+        (
+          <input className='AdminDashboardButton' type='Button' value='Add' onClick={addRecord} />
+        )
+      }
     </div>
   )
 }
@@ -268,6 +361,8 @@ const AdminDashboard = (props) =>
   const [password, setPassword] = useState("");
   const [confirmedPassword, setConfirmedPassword] = useState("");
   const [records, setRecords] = useState([]);
+  const [selectedRecord, setSelectedRecord] = useState({});
+  const [showUpdate, setShowUpdate] = useState(false);
 
   const navigate = useNavigate();
 
@@ -386,41 +481,37 @@ const AdminDashboard = (props) =>
     navigate("/admin/login");
   }
 
-  const searchBarOnClick = (key) =>
+  const searchBarOnClick = (number) =>
   {
-    
+    const record = records.filter(record => record.number == number)[0];
+    setSelectedRecord(record);
+    setShowUpdate(true);
   }
 
   useEffect(() =>
   {
     // Get all the records from the db.
-    setRecords([
-      {
-        'artist': 'Michael Jackson',
-        'title': 'Thriller',
-        'id': '1'
-      },
-      {
-        'artist': 'Kanye West',
-        'title': 'College Dropout',
-        'id': '2'
-      },
-      {
-        'artist': 'The Black Keys',
-        'title': 'Rubber Factory',
-        'id': '3'
-      },
-      {
-        'artist': 'Led Zeppelin',
-        'title': '1',
-        'id': '4'
+    fetch('/api/records/all/', {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json",
+          "authorization": props.jwt
       }
-    ]);
-  }, [props, navigate]);
-
-
-
-
+    })
+    .then(response => response.json())
+    .then(json => 
+      {
+        if (json.success)
+        {
+          setRecords(json.records);
+        }
+        else
+        {
+          showToast(json.message, "warning");
+        }
+      }
+    )
+  }, [props, navigate, showUpdate]);
 
   return (
     <div className="AdminDashboard">
@@ -439,8 +530,27 @@ const AdminDashboard = (props) =>
           <h2>Update Record</h2>
           <SearchBar searchBarOnClick={searchBarOnClick} records={records} />
 
+          <div className='HorizontalSeparator' style={{width: '50%', margin: '80px 0 20px 0'}} />
 
-
+          {showUpdate ? (
+            <Record 
+              update={true} 
+              jwt={props.jwt} 
+              artist={selectedRecord.artist} 
+              title={selectedRecord.title} 
+              number={selectedRecord.number} 
+              releaseDate={selectedRecord.releaseDate} 
+              image={selectedRecord.image}
+              contentType={selectedRecord.contentType}
+              setSelectedRecord={setSelectedRecord}
+              setShowUpdate={setShowUpdate}
+            />
+          )
+          :
+          (
+            <h3 style={{color: "#888"}}>Search records to edit them</h3>
+          )
+          }
         </div>
 
         <div className="AddArea">

@@ -26,11 +26,17 @@ const authenticateToken = (req, res, next) =>
 }
 
 // Get all the vinyl record data and pictures from the database.
-router.get('/record/all/', (req, res, next) =>
+router.get('/records/all/', authenticateToken, (req, res, next) =>
 {
-  return res.json({
-    message: "All the records"
-  });
+  Records.find({})
+    .then(docs =>
+      {
+        return res.json({success: true, records: docs})
+      })
+    .catch(err =>
+      {
+        return res.json({success: false, message: "Error while fetching the records from the database!"});
+      });
 });
 
 // Add new record to the database.
@@ -71,8 +77,16 @@ router.put('/record/update/', (req, res, next) =>
 // Remove a record based on it's name and artist.
 router.delete('/record/delete/', (req, res, next) =>
 {
-  return res.json({
-    message: "Record deleted!"
+  const number = req.body.number;
+
+  Records.findOneAndRemove({number: number})
+  .then((doc) =>
+  {
+    return res.json({success: true, message: "Record deleted!"});
+  })
+  .catch((err) => 
+  {
+    return res.status(403).json({success: false, message: "Error while trying to delete the record"});
   });
 });
 

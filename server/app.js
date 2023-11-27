@@ -5,6 +5,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 
+process.env['ALLOW_CONFIG_MUTATIONS']=true;
+
 const indexRouter = require('./routes/index');
 const adminRouter = require('./routes/admin');
 

@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const Admin = require('../models/Admin');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const {body, validationResult} = require("express-validator");
+const config = require('config');
 
 /*
 
@@ -33,46 +33,43 @@ router.post('/login/', (req, res, next) =>
   const id = req.body.id;
   const password = req.body.password;
 
-  Admin.findOne({id}).exec().then(admin =>
-    {
-      if (admin == null)
-      {
-        return res.json({success: false, message: "Invalid ID!"});
-      }
+  if (id !== config.get('admin.id'))
+  {
+    return res.json({success: false, message: "Invalid ID!"});
+  }
 
-      bcrypt.compare(password, admin.password, (err, isMatch) =>
-      {
-        if (err) throw err;
-        else if (isMatch)
+  bcrypt.compare(password, config.get('admin.password'), (err, isMatch) =>
+  {
+    if (err) throw err;
+    else if (isMatch)
+    {
+      const payload = {
+        id
+      }
+      jwt.sign(
+        payload,
+        "bananaboat",
         {
-          const payload = {
-            id
+          expiresIn: "12h"
+        },
+        (err, token) =>
+        {
+          if (err) 
+          {
+            throw err;
           }
-          jwt.sign(
-            payload,
-            "bananaboat",
-            {
-              expiresIn: "4h"
-            },
-            (err, token) =>
-            {
-              if (err) 
-              {
-                throw err;
-              }
-              else 
-              {
-                return res.json({success: true, token});
-              }
-            }
-          )
+          else 
+          {
+            return res.json({success: true, token});
+          }
         }
-        else
-        {
-          return res.status(401).json({success: false, message: "Invalid password!"});
-        }
-      })
-    });
+      )
+    }
+    else
+    {
+      return res.status(401).json({success: false, message: "Invalid password!"});
+    }
+  })
 });
 
 // Update the admins password
@@ -108,19 +105,14 @@ router.put('/update/password/',
     {
       if (err) return res.json({success: false, message: "Password couldn't be updated because of an error!"});
 
-      const filter = { id: req.admin.id };
-      const update = { password: hash };
-
-      Admin.findOneAndUpdate(filter, update)
-        .then((docs) =>
-      {
-        return res.json({success: true, message: "Password updated succesfully!"});
-      })
+      config.admin.password = hash;
+      return res.json({success: true, message: "Password updated succesfully!"});
+      
     })
   });
 });
 
-// Update the admin id
+// Update the admin id.
 router.put('/update/id/', authenticateToken, (req, res, next) =>
 {
   const ID = req.body.ID;
@@ -131,16 +123,11 @@ router.put('/update/id/', authenticateToken, (req, res, next) =>
     return res.json({success: false, message: "The IDs must be the same"});
   }
 
-  filter = { id: req.admin.id };
-  update = { id: ID };
-
-  Admin.findOneAndUpdate(filter, update)
-    .then((docs) =>
-    {
-      return res.json({success: true, message: "The admin ID updated succesfully!"});
-    });
+  config.admin.id = ID;
+  return res.json({success: true, message: "The admin ID updated succesfully!"});
 });
 
+// Validate that the authetication token is correct.
 router.post('/validate_token/', (req, res, next) =>
 {
   const token = req.body.token;

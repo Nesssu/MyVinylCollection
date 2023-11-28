@@ -1,4 +1,54 @@
-.App
+body
+{
+  width: 100%;
+}
+
+h1
+{
+  margin: 0;
+  padding: 5px;
+  font-size: xx-large;
+  font-family: 'Italianno', cursive;
+  font-weight: 100;
+  color: white;
+}
+
+h2
+{
+  margin: 0;
+  padding: 5px;
+  font-size: large;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+  color: white;
+  text-decoration: underline;
+}
+
+h3
+{
+  margin: 0;
+  padding: 5px;
+  font-size: medium;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+  color: white;
+}
+
+p
+{
+  margin: 0;
+  padding: 5px;
+  font-size: small;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+  color: black;
+}
+
+.NoScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.Home
 {
   display: flex;
   flex-direction: column;
@@ -6,6 +56,13 @@
   height: 100vh;
   background-color: white;
   align-items: center;
+}
+
+.NotFound 
+{
+  width: 100%;
+  margin-top: 20%;
+  text-align: center;
 }
 
 .NavBar
@@ -54,3 +111,453 @@
   margin-top: 50px;
   text-align: center;
 }
+
+.ConfirmDialog {
+  background-color: white;
+  padding: 20px;
+  
+  border: none;
+  border-radius: 10px;
+
+  font-size: normal;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+  color: black;
+}
+
+.ConfirmDialogAccept {
+  background-color: #922724;
+  color: white;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+
+  border: none;
+  border-radius: 10px;
+
+  padding: 10px 20px 10px 20px;
+  margin: 20px 0 0 5px;
+
+  transition: all 0.5s;
+}
+
+.ConfirmDialogAccept:hover {
+  cursor: pointer;
+  border-radius: 25px;
+}
+
+.ConfirmDialogReject {
+  background-color: #e1e1e1;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+
+  border: none;
+  border-radius: 10px;
+
+  padding: 10px 20px 10px 20px;
+  margin: 20px 5px 0 0;
+
+  transition: all 0.5s;
+}
+
+.ConfirmDialogReject:hover {
+  cursor: pointer;
+  border-radius: 25px;
+}
+
+.ToastContainer {
+  background-color: white;
+  color: black;
+
+  font-size: normal;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+
+  border: none;
+  border-radius: 10px;
+}
+
+
+
+
+/* Styling for the admin dashboard */
+
+.AdminDashboard
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  background-image: url('../src/media/admin_dashboard_background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+.DashboardHeaderArea
+{
+  padding: 25px 0 25px 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.DashboardLogoutButton
+{
+  font-size: small;
+  font-family: 'Fraunces', serif;
+  color: black;
+
+  margin: 0 25px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+  border: none;
+  border-radius: 10px;
+  background-color: white;
+  padding: 10px 25px 10px 25px;
+  position: absolute;
+  right: 10px;
+  transition: all 0.5s;
+}
+
+.DashboardLogoutButton:hover
+{
+  cursor: pointer;
+  border-radius: 25px;
+}
+
+.DashboardTitle
+{
+  height: fit-content;
+  width: fit-content;
+  text-align: center;
+  margin: 0;
+}
+
+.AdminDashboardInput
+{
+  padding: 10px 15px 10px 15px;
+  width: 50%;
+  height: 25px;
+  max-width: 350px;
+  min-width: 100px;
+  margin: 5px 0 5px 0;
+  
+  border: none;
+  border-radius: 10px;
+  outline: none;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+}
+
+.AdminDashboardInput::-webkit-outer-spin-button,
+.AdminDashboardInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.AdminDashboardInput[type=number] {
+  -moz-appearance: textfield;
+}
+
+.AdminDashboardButton
+{
+  background-color: white;
+  width: calc(50% + 30px);
+  height: 45px;
+  max-width: calc(350px + 30px);
+  min-width: calc(50px + 30px);
+  padding: 10px 15px 10px 15px;
+  margin: 5px 0 5px 0;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: small;
+  font-weight: normal;
+  font-family: 'Fraunces', serif;
+  color: #123524;
+
+  transition: all 0.5s;
+}
+
+.AdminDashboardButton:hover
+{
+  cursor: pointer;
+  border-radius: 25px;
+}
+
+.RecordBottomArea
+{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 98%;
+  max-width: 630px; 
+}
+
+.RecordBottomInputArea
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 280px;
+  width: 280px;
+}
+
+.RecordBottomInputArea .AdminDashboardButton
+{
+  width: 100%;
+}
+
+.RecordBottomInputArea .AdminDashboardInput
+{
+  width: 250px;
+}
+
+
+.AddAndUpdateArea
+{
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: row;
+}
+
+.AddArea
+{
+  width: 50vw;
+  height: 100%;
+
+  padding: 0;
+  align-items: center;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.UpdateArea
+{
+  width: 50vw;
+  height: 100%;
+
+  padding: 0;
+  align-items: center;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.ImageIcon {
+  color: black;
+  font-size: 100px;
+  margin: 0;
+  padding: 0;
+  transition: all 0.5s;
+  position: absolute;
+}
+
+.ImageText
+{
+  color: #888;
+  font-size: small;
+  margin: 0;
+  padding: 0;
+  transition: all 0.5s;
+  position: absolute;
+  font-family: 'Fraunces', serif;
+}
+
+.ChangeImageContainer {
+  padding: 15px 15px 15px 15px;
+  width: 50%;
+  max-width: 350px;
+  height: auto;
+  aspect-ratio: 1/1;
+  margin: 5px 0 5px 0;
+  border: none;
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+  background-color: white;
+  transition: all 0.5s;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+.ChangeImageContainer:hover {
+  cursor: pointer;
+}
+
+.ChangeImageContainer label:hover {
+  cursor: pointer;
+}
+
+.AdminCredentialsArea
+{
+  width: 100%;
+  height: 100%;
+
+  padding: 100px 0 100px 0;
+  align-items: center;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.AdminDashboardSearchBarBackground
+{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 15px 10px 15px;
+  width: 50%;
+  min-width: 100px;
+  max-width: 350px;
+  min-height: 25px;
+  margin: 50px 0 10px 0;
+  background-color: white;
+  
+  border: none;
+  border-radius: 10px;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+
+  position: absolute;
+}
+
+.AdminDashboardSearchBar
+{
+  width: 100%;
+  height: 100%;
+  margin: 0 0 0 5px;
+
+  border: none;
+  outline: none;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+}
+
+.SearchBarIcon
+{
+  color: #888;
+  font-size: x-large;
+}
+
+.HorizontalSeparator
+{
+  height: 1px;
+  width: 100%;
+  background-color: #888;
+  border: none;
+}
+
+.AdminDashboardSearchBarResultArea
+{
+  width: 100%;
+  height: 100%;
+  margin: 10px 0 5px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.AdminDashboardSearchBarResultItem
+{
+  display: flex;
+  width: 100%;
+  margin: 1px;
+}
+
+.AdminDashboardSearchBarResultItem:hover
+{
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+
+
+
+
+/* Styling for the admin login page */
+
+.AdminLogin
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;  
+
+  background-image: url('../src/media/admin_dashboard_background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+.LoginInput
+{
+  text-align: center;
+  font-size: small;
+  font-family: 'Fraunces', serif;
+
+  padding: 10px 15px 10px 15px;
+  width: 50%;
+  height: 25px;
+  width: 300px;
+  margin: 10px 0 10px 0;
+  
+  border: none;
+  border-radius: 5px;
+  outline: none;
+}
+
+.LoginButton
+{
+  background-color: white;
+  height: 45px;
+  width: 100px;
+  padding: 10px 15px 10px 15px;
+  margin: 10px 0 10px 0;
+
+  border: none;
+  border-radius: 5px;
+
+  font-size: small;
+  font-family: 'Fraunces', serif;
+  text-align: center;
+  color: black;
+
+  transition: all 0.5s;
+}
+
+.LoginButton:hover
+{
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+.LoginTitle
+{
+  position: absolute;
+  top: 25px;
+}
+
+

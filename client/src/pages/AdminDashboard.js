@@ -333,7 +333,7 @@ const Record = (props) =>
       }
       <input className='AdminDashboardInput' type='Text' placeholder='Artist' value={artist} onChange={handleArtistChange} />
       <input className='AdminDashboardInput' type='Text' placeholder='Title' value={title} onChange={handleTitleChange} />
-      <input className='AdminDashboardInput' type='Date' value={releaseDate} placeholder='Release Date' onChange={handleReleaseDateChange} />
+      <input className='AdminDashboardInput' type='Date' value={releaseDate} placeholder='Release Date' onChange={handleReleaseDateChange}/>
       <input className='AdminDashboardInput' type='Number' placeholder='Number' value={number} onChange={handleNumberChange} />
       <div className='ChangeImageContainer' onClick={handleImageClick} onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} style={{backgroundImage: image && `url(data:${contentType};base64,${image})`}} >
         <BiImageAdd className='ImageIcon' style={{opacity: hover ? "1" : "0" }} />

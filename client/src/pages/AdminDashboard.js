@@ -260,11 +260,40 @@ const Record = (props) =>
   const updateRecord = () =>
   {
     // Send the updated data to the database
+    const body = {
+      title,
+      artist,
+      releaseDate,
+      number,
+      image,
+      _id: props._id
+    }
 
+    fetch('/api/record/update',
+    {
+      method: 'PUT',
+      headers: {
+        "Content-Type": "application/json",
+        "authorization": props.jwt
+      },
+      body: JSON.stringify(body)
+    })
+    .then(response => response.json())
+    .then(json =>
+      {
+        if (json.success)
+        {
+          showToast(json.message, "success");
 
-    // Close the update view
-    props.setSelectedRecord({});
-    props.setShowUpdate(false);
+          // Close the update view
+          props.setSelectedRecord({});
+          props.setShowUpdate(false);
+        }
+        else
+        {
+          showToast(json.message, "warning");
+        }
+      });
   }
   const deleteRecord = () =>
   {
@@ -563,6 +592,7 @@ const AdminDashboard = (props) =>
               releaseDate={selectedRecord.releaseDate} 
               image={selectedRecord.image}
               contentType={selectedRecord.contentType}
+              _id={selectedRecord._id}
               setSelectedRecord={setSelectedRecord}
               setShowUpdate={setShowUpdate}
             />

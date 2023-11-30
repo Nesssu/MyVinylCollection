@@ -69,9 +69,32 @@ router.post('/add/new/record/', authenticateToken, (req, res, next) =>
 // Edit record by it's name and artist
 router.put('/record/update/', (req, res, next) =>
 {
-  return res.json({
-    message: "Record updated!"
-  });
+  const filter = { _id: req.body._id };
+  const update = { $set: 
+    { 
+      artist: req.body.artist,
+      title: req.body.title,
+      releaseDate: req.body.releaseDate,
+      number: req.body.number,
+      image: req.body.image
+    } 
+  };
+
+  Records.findOneAndUpdate(filter, update)
+  .then((result) =>
+  {
+    if (result)
+    {
+      return res.json({success: true, message: "Record updated!"});
+    }
+  })
+  .catch((error) =>
+  {
+    if (error)
+    {
+      return res.json({success: false, message: "Error while updating the record!"});
+    }
+  })
 });
 
 // Remove a record based on it's name and artist.

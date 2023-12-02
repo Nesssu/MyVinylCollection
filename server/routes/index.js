@@ -26,7 +26,7 @@ const authenticateToken = (req, res, next) =>
 }
 
 // Get all the vinyl record data and pictures from the database.
-router.get('/records/all/', authenticateToken, (req, res, next) =>
+router.get('/records/all/', (req, res, next) =>
 {
   Records.find({})
     .then(docs =>

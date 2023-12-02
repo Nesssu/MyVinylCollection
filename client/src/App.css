@@ -48,67 +48,10 @@ p
   display: none;
 }
 
-.Home
-{
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
-  height: 100vh;
-  background-color: white;
-  align-items: center;
-}
-
 .NotFound 
 {
   width: 100%;
   margin-top: 20%;
-  text-align: center;
-}
-
-.NavBar
-{
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: white;
-  border: solid;
-  border-color: white;
-  border-width: 0 0 1px 0;
-  width: 100vw;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 0 10px 0;
-  box-shadow: 0 0 5px #888;
-}
-
-.Footer
-{
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  background-color: white;
-  border: solid;
-  border-color: white;
-  border-width: 1px 0 0 0;
-  width: 100vw;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 0 10px 0;
-  box-shadow: 0 0 5px #888;
-}
-
-.CollectionBackground
-{
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
-  height: 100%;
-  background-color: white;
-  margin-top: 50px;
   text-align: center;
 }
 
@@ -561,3 +504,116 @@ p
 }
 
 
+
+
+
+/* Styling for the Home page */
+
+.Home
+{
+  background-image: url('../src/media/home_background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: bottom;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.VinylCollection
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 100vw;
+  height: 100vh;  
+  position: relative;
+}
+
+.CollectionBackground
+{
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100%;
+}
+
+.Header 
+{
+  margin: 0;
+  padding: 10px 0 10px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.Header h1
+{
+  color: black;
+  padding: 0;
+  margin: 0;
+}
+
+.Header .HomeHeaderLink
+{
+  font-family: 'Fraunces', serif;
+  text-align: center;
+  color: black;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  right: 5%;
+}
+
+.Header .AboutHeaderLink
+{
+  font-family: 'Fraunces', serif;
+  text-align: center;
+  color: black;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  left: 5%;
+}
+
+.Header h2:hover
+{
+  cursor: pointer;
+}
+
+.About
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  min-width: 100vw;
+  height: 100vh;
+}
+
+.AboutTextArea
+{
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

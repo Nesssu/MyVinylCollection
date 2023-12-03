@@ -519,8 +519,8 @@ p
 
   display: flex;
   flex-direction: row;
-  align-items: center;
   overflow-x: hidden;
+  overflow-y: scroll;
   scroll-behavior: smooth;
 }
 
@@ -530,15 +530,18 @@ p
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-width: 100vw;
-  height: 100vh;  
+  min-width: 100vw;  
   position: relative;
+
+  margin: 0;
 }
 
 .CollectionBackground
 {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  position: relative;
   width: 100vw;
   height: 100%;
 }
@@ -624,15 +627,19 @@ p
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  position: absolute;
   margin: 20px 0 0 0;
   padding: 10px;
+  width: 50%;
+  min-width: 100px;
+  max-width: 500px;
 }
 
 .SearchBarBackground
 {
   background-color: white;
   padding: 10px;
-  width: 50%;
+  width: 100%;
   min-width: 100px;
   max-width: 500px;
 
@@ -716,4 +723,18 @@ p
   background-size: cover;
   background-position: center;
   margin: 0 0 15px 0;
+}
+
+.RecordList
+{
+  display: grid;
+  grid-template-columns: 300px 300px 300px;
+  column-gap: 30px;
+  row-gap: 30px;
+  align-items: center;
+  justify-content: center;
+  
+  width: 100vw;
+  margin: 100px 0 20px 0;
+  padding: 10px 0 40px 0;
 }

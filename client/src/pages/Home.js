@@ -10,7 +10,7 @@ const Record = (props) =>
       <div className='RecordImage' style={{backgroundImage: `url(data:${props.contentType};base64,${props.image})`}}/>
       <div className='HorizontalSeparator' style={{"width": "90%"}} />
       <div className='RecordInfoArea'>
-        <p style={{}}># {props.number}</p>
+        <p># {props.number}</p>
         <p>{props.artist}</p>
         <p>{props.title}</p>
       </div>
@@ -77,6 +77,11 @@ const SearchBar = (props) =>
       {
         setClearSearch(true);
         props.searchBarSearch(filteredRecords);
+      }
+      else
+      {
+        setClearSearch(true);
+        props.searchBarSearch(props.records);
       }
     }
   }
@@ -207,10 +212,11 @@ const Home = (props) =>
         if (json.success)
         {
           setRecords(json.records);
+          setRecordsToDisplay(json.records);
         }
       }
     )
-  }, [props])
+  }, []);
 
   useState(() =>
   {

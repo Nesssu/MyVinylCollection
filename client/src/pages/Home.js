@@ -7,11 +7,12 @@ const Record = (props) =>
 {
   return (
     <div className='RecordBackground'>
-      <div className='RecordImage'>
-
-      </div>
+      <div className='RecordImage' style={{backgroundImage: `url(data:${props.contentType};base64,${props.image})`}}/>
+      <div className='HorizontalSeparator' style={{"width": "90%"}} />
       <div className='RecordInfoArea'>
-
+        <p style={{}}># {props.number}</p>
+        <p>{props.artist}</p>
+        <p>{props.title}</p>
       </div>
     </div>
   )
@@ -74,6 +75,7 @@ const SearchBar = (props) =>
     {
       if (search !== "")
       {
+        setClearSearch(true);
         props.searchBarSearch(filteredRecords);
       }
     }
@@ -229,7 +231,11 @@ const Home = (props) =>
           </div>
 
           <div className='RecordList'>
-
+            {
+              recordsToDisplay.map((record) => (
+                <Record artist={record.artist} title={record.title} number={record.number} key={record._id} image={record.image} contentType={record.contentType}/>
+              ))
+            }
           </div>
         </div>
       </div>

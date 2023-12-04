@@ -151,14 +151,12 @@ const Record = (props) =>
   // The real data of the record
   const [title, setTitle] = useState("");
   const [artist, setArtist] = useState("");
-  const [releaseDate, setReleaseDate] = useState(Date);
   const [number, setNumber] = useState("");
   const [image, setImage] = useState(null);
 
   // History of the records data to keep track if it has changed
   const [titleHistory, setTitleHistory] = useState("");
   const [artistHistory, setArtistHistory] = useState("");
-  const [releaseDateHistory, setReleaseDateHistory] = useState(Date);
   const [numberHistory, setNumberHistory] = useState("");
   const [imageHistory, setImageHistory] = useState(null);
 
@@ -172,7 +170,6 @@ const Record = (props) =>
   {
     if (title != titleHistory) return true;
     if (artist != artistHistory) return true;
-    if (releaseDate != releaseDateHistory) return true;
     if (number != numberHistory) return true;
     if (image != imageHistory) return true;
 
@@ -186,10 +183,6 @@ const Record = (props) =>
   const handleArtistChange = (event) =>
   {
     setArtist(event.target.value);
-  }
-  const handleReleaseDateChange = (event) =>
-  {
-    setReleaseDate(event.target.value);
   }
   const handleNumberChange = (event) =>
   {
@@ -216,12 +209,11 @@ const Record = (props) =>
   }
   const addRecord = () =>
   {
-    if (title !== "" && artist !== "" && releaseDate !== "" && number !== "" && image !== null)
+    if (title !== "" && artist !== "" && number !== "" && image !== null)
     {
         const body = {
             title,
             artist,
-            releaseDate,
             number,
             image
         };
@@ -248,7 +240,6 @@ const Record = (props) =>
             })
         setTitle("");
         setArtist("");
-        setReleaseDate("");
         setNumber("");
         setImage(null);
     }
@@ -263,7 +254,6 @@ const Record = (props) =>
     const body = {
       title,
       artist,
-      releaseDate,
       number,
       image,
       _id: props._id
@@ -331,27 +321,25 @@ const Record = (props) =>
   }
   useEffect(() =>
   {
-  }, [title, artist, releaseDate, number, image])
+  }, [title, artist, number, image])
   useEffect(() =>
   {
     if (props.update && isFirstTime)
     {
       setArtist(props.artist);
       setTitle(props.title);
-      setReleaseDate(props.releaseDate);
       setNumber(props.number);
       setImage(props.image);
       setContentType(props.contentType);
 
       setArtistHistory(props.artist);
       setTitleHistory(props.title);
-      setReleaseDateHistory(props.releaseDate);
       setNumberHistory(props.number);
       setImageHistory(props.image);
 
       setIsFirstTime(false);
     }
-  }, [props, title, artist, image, releaseDate, number]);
+  }, [props, title, artist, image, number]);
 
   return (
     <div style={{'width': '100%', 'display': 'flex', 'flexDirection': 'column', 'alignItems': 'center'}} >
@@ -362,7 +350,6 @@ const Record = (props) =>
       }
       <input className='AdminDashboardInput' type='Text' placeholder='Artist' value={artist} onChange={handleArtistChange} />
       <input className='AdminDashboardInput' type='Text' placeholder='Title' value={title} onChange={handleTitleChange} />
-      <input className='AdminDashboardInput' type='Date' value={releaseDate} placeholder='Release Date' onChange={handleReleaseDateChange}/>
       <input className='AdminDashboardInput' type='Number' placeholder='Number' value={number} onChange={handleNumberChange} />
       <div className='ChangeImageContainer' onClick={handleImageClick} onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} style={{backgroundImage: image && `url(data:${contentType};base64,${image})`}} >
         <BiImageAdd className='ImageIcon' style={{opacity: hover ? "1" : "0" }} />
@@ -589,7 +576,6 @@ const AdminDashboard = (props) =>
               artist={selectedRecord.artist} 
               title={selectedRecord.title} 
               number={selectedRecord.number} 
-              releaseDate={selectedRecord.releaseDate} 
               image={selectedRecord.image}
               contentType={selectedRecord.contentType}
               _id={selectedRecord._id}

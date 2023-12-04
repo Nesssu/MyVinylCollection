@@ -7,7 +7,6 @@ let recordsSchema = new Records ({
     title: {type: String},
     image: {type: String},
     contentType: {type: String},
-    releaseDate: {type: String},
     number: {type: String}
 });
 

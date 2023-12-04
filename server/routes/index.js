@@ -44,14 +44,12 @@ router.post('/add/new/record/', authenticateToken, (req, res, next) =>
 {
   const artist = req.body.artist;
   const title = req.body.title;
-  const releaseDate = req.body.releaseDate;
   const number = req.body.number;
   const image = req.body.image;
 
   Records.create({
     artist: artist,
     title: title,
-    releaseDate: releaseDate,
     number: number,
     image: image,
     contentType: "image/jpeg"
@@ -74,7 +72,6 @@ router.put('/record/update/', (req, res, next) =>
     { 
       artist: req.body.artist,
       title: req.body.title,
-      releaseDate: req.body.releaseDate,
       number: req.body.number,
       image: req.body.image
     } 

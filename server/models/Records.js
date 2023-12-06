@@ -7,7 +7,7 @@ let recordsSchema = new Records ({
     title: {type: String},
     image: {type: String},
     contentType: {type: String},
-    number: {type: String}
+    number: {type: Number}
 });
 
 module.exports = mongoose.model("record", recordsSchema);

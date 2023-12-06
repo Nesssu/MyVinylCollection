@@ -1,7 +1,7 @@
 import '../App.css';
 import { IoIosArrowRoundForward, IoIosArrowRoundBack, IoIosSearch } from "react-icons/io"
+import { RxCross1 } from "react-icons/rx";
 import { useState, useRef, useEffect } from 'react';
-
 
 const Record = (props) =>
 {
@@ -12,7 +12,9 @@ const Record = (props) =>
       <div className='RecordInfoArea'>
         <p># {props.number}</p>
         <p>{props.artist}</p>
-        <p>{props.title}</p>
+        <div style={{position: "relative", width: "100%", height: "100%", display: "flex", justifyContent: "center", margin: "0 0 20px 0"}} >
+          <p style={{position: "absolute"}} >{props.title}</p>
+        </div>
       </div>
     </div>
   )
@@ -21,16 +23,14 @@ const Record = (props) =>
 const SearchResultItem = (props) =>
 {
   const [artist, setArtist] = useState("");
-  const [itemKey, setItemKey] = useState(0);
 
   useEffect(() =>
   {
     setArtist(props.artist);
-    setItemKey(props.itemKey);
   }, [props])
 
   return (
-    <div className='SearchBarResultItem' onClick={() => {props.searchBarOnClick(artist); props.setClearSearch(true);}} >
+    <div className='SearchBarResultItem' onClick={() => {props.searchBarOnClick(artist); props.setClearSearch(true); props.setSearch(artist); }} >
       <p>{artist}</p>
     </div>
   );
@@ -40,6 +40,7 @@ const SearchBar = (props) =>
 {
   const [showResults, setShowResults] = useState(false);
   const [filteredRecords, setFilteredRecords] = useState([]);
+  const [searchedArtists, setSearchedArtists] = useState([]);
   const [search, setSearch] = useState("");
   const [clearSearch, setClearSearch] = useState(false);
 
@@ -47,24 +48,36 @@ const SearchBar = (props) =>
   {
     setSearch(event.target.value);
 
-    let temp = [];
+    let recordTemp = [];
 
     for (let i = 0; i < props.records.length; i++)
     {
       if ((props.records[i].artist.toLowerCase().includes(event.target.value.toLowerCase())) && event.target.value !== "")
       {
-        temp.push(props.records[i]);
+        recordTemp.push(props.records[i]);
       }
     }
 
-    if (temp.length !== 0)
+    let artistTemp = [];
+
+    if (recordTemp.length !== 0)
     {
-      setFilteredRecords(temp);
+      for (let i = 0; i < recordTemp.length; i++)
+      {
+        if (artistTemp.some(record => record.artist == recordTemp[i].artist) === false)
+        {
+           artistTemp.push(recordTemp[i]);
+        }
+      }
+      
+      setSearchedArtists(artistTemp);
+      setFilteredRecords(recordTemp);
       setShowResults(true);
     }
     else
     {
       setFilteredRecords([]);
+      setSearchedArtists([]);
       setShowResults(false);
     }
   }
@@ -73,15 +86,10 @@ const SearchBar = (props) =>
   {
     if (event.keyCode === 13)
     {
-      if (search !== "")
+      if (search !== "" && filteredRecords.length > 0)
       {
         setClearSearch(true);
         props.searchBarSearch(filteredRecords);
-      }
-      else
-      {
-        setClearSearch(true);
-        props.searchBarSearch(props.records);
       }
     }
   }
@@ -91,8 +99,8 @@ const SearchBar = (props) =>
     if (clearSearch)
     {
       setFilteredRecords([]);
+      setSearchedArtists([]);
       setShowResults(false);
-      setSearch("");
       setClearSearch(false);
     }
   }, [showResults, filteredRecords, clearSearch]);
@@ -102,13 +110,14 @@ const SearchBar = (props) =>
       <div className='SearchBarInputArea'>
         <IoIosSearch className='SearchBarIcon' />
         <input type='text' className='SearchBarInput' onChange={handleSearchChange} onKeyDown={handleKeyDown} value={search} placeholder='Search for artists' />
+        {props.allowSearchClear && <RxCross1 className='SearchBarIcon Hover' onClick={() => { props.searchBarSearch(props.records); props.setAllowSearchClear(false); setSearch(""); }} />}
       </div>
       {showResults && (
         <div className='SearchBarResultArea'>
           <div className='HorizontalSeparator' />
           {
-            filteredRecords.slice(0, 10).map(record =>  (
-                <SearchResultItem key={record._id} artist={record.artist} itemKey={record.number} searchBarOnClick={props.searchBarOnClick} setClearSearch={setClearSearch} />
+            searchedArtists.slice(0, 10).map(record =>  (
+                <SearchResultItem key={record._id} artist={record.artist} searchBarOnClick={props.searchBarOnClick} setClearSearch={setClearSearch} setSearch={setSearch} />
             ))
           }
         </div>
@@ -125,6 +134,8 @@ const Home = (props) =>
 
   const [records, setRecords] = useState([]);
   const [recordsToDisplay, setRecordsToDisplay] = useState([]);
+  const [disableScroll, setDisableScroll] = useState(false);
+  const [allowSearchClear, setAllowSearchClear] = useState(false);
 
   const scrollToRef = (ref) =>
   {
@@ -148,11 +159,13 @@ const Home = (props) =>
     }
 
     setRecordsToDisplay(temp);
+    setAllowSearchClear(true);
   }
 
   const searchBarSearch = (filteredList) =>
   {
     setRecordsToDisplay(filteredList);
+    setAllowSearchClear(true);
   }
 
   useState(() =>
@@ -211,16 +224,18 @@ const Home = (props) =>
       {
         if (json.success)
         {
-          setRecords(json.records);
+          const temp = json.records.sort((a, b) => a.number - b.number);
+          setRecords(temp);
           setRecordsToDisplay(json.records);
         }
       }
     )
   }, []);
 
-  useState(() =>
+  useEffect(() =>
   {
-  }, [recordsToDisplay]);
+    document.body.style.overflowY = disableScroll ? "hidden" : "scroll";
+  }, [recordsToDisplay, disableScroll]);
 
   return (
     <div className="Home">
@@ -228,12 +243,12 @@ const Home = (props) =>
       <div className='VinylCollection' ref={homeRef}>
         <div className="Header">
           <h1>My Vinyl Collection</h1>
-          <h2 className='HomeHeaderLink' onClick={() => scrollToRef(aboutRef)} >About <IoIosArrowRoundForward className='HeaderIcon' /></h2>
+          <h2 className='HomeHeaderLink' onClick={() => { scrollToRef(aboutRef); setDisableScroll(true); }} >About <IoIosArrowRoundForward className='HeaderIcon' /></h2>
         </div>
 
         <div className="CollectionBackground">
           <div className='SearchBar'>
-            <SearchBar records={records} searchBarOnClick={searchBarOnClick} searchBarSearch={searchBarSearch} />
+            <SearchBar records={records} searchBarOnClick={searchBarOnClick} searchBarSearch={searchBarSearch} allowSearchClear={allowSearchClear} setAllowSearchClear={setAllowSearchClear} />
           </div>
 
           <div className='RecordList'>
@@ -250,7 +265,7 @@ const Home = (props) =>
 
       <div className='About' ref={aboutRef}>
         <div className="Header">
-          <h2 className='AboutHeaderLink' onClick={() => scrollToRef(homeRef)}><IoIosArrowRoundBack className='HeaderIcon' />Back</h2>
+          <h2 className='AboutHeaderLink' onClick={() =>  { scrollToRef(homeRef); setDisableScroll(false); }}><IoIosArrowRoundBack className='HeaderIcon' />Back</h2>
           <h1>About</h1>
         </div>
 

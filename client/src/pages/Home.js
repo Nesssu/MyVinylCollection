@@ -153,6 +153,8 @@ const Home = (props) =>
   const [recordsToDisplay, setRecordsToDisplay] = useState([]);
   const [disableScroll, setDisableScroll] = useState(false);
   const [allowSearchClear, setAllowSearchClear] = useState(false);
+  const [loadRecordsTo, setLoadReacordsTo] = useState(16);
+  const [moreToCome, setMoreToCome] = useState(true);
 
   const scrollToRef = (ref) =>
   {
@@ -161,6 +163,12 @@ const Home = (props) =>
       ref.current.scrollIntoView();
       currentRef.current = ref.current;
     }
+  }
+
+  const loadMoreClick = () =>
+  {
+    const nextLast = loadRecordsTo + 15;
+    setLoadReacordsTo(nextLast);
   }
 
   const searchBarOnClick = (artist) =>
@@ -228,9 +236,9 @@ const Home = (props) =>
     
   }, []);
 
-  useState(() =>
+  useEffect(() =>
   {
-    fetch('/api/records/all/', {
+    fetch('/api/fetch/records/' + loadRecordsTo.toString(), {
       method: "GET",
       headers: {
           "Content-Type": "application/json"
@@ -242,12 +250,21 @@ const Home = (props) =>
         if (json.success)
         {
           const temp = json.records.sort((a, b) => a.number - b.number);
-          setRecords(temp);
-          setRecordsToDisplay(json.records);
+          setRecords([...records, ...temp]);
+          setRecordsToDisplay([...records, ...json.records]);
+
+          if (temp.length === 15)
+          {
+            setMoreToCome(true);
+          }
+          else
+          {
+            setMoreToCome(false);
+          }
         }
       }
     )
-  }, []);
+  }, [loadRecordsTo]);
 
   useEffect(() =>
   {
@@ -275,6 +292,13 @@ const Home = (props) =>
               ))
             }
           </div>
+
+          {moreToCome && (
+            <div className='LoadMoreButton' onClick={loadMoreClick}>
+              Load More
+            </div>  
+          )}
+
         </div>
       </div>
 

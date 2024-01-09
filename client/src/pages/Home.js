@@ -46,36 +46,53 @@ const SearchBar = (props) =>
 
   const handleSearchChange = (event) =>
   {
-    setSearch(event.target.value);
-
-    let recordTemp = [];
-
-    for (let i = 0; i < props.records.length; i++)
+    if (event.target.value !== "")
     {
-      if ((props.records[i].artist.toLowerCase().includes(event.target.value.toLowerCase())) && event.target.value !== "")
-      {
-        recordTemp.push(props.records[i]);
-      }
-    }
+      setSearch(event.target.value);
 
-    let artistTemp = [];
-
-    if (recordTemp.length !== 0)
-    {
-      for (let i = 0; i < recordTemp.length; i++)
-      {
-        if (artistTemp.some(record => record.artist == recordTemp[i].artist) === false)
-        {
-           artistTemp.push(recordTemp[i]);
+      fetch('/api/records/search/' + event.target.value, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
         }
-      }
-      
-      setSearchedArtists(artistTemp);
-      setFilteredRecords(recordTemp);
-      setShowResults(true);
+      })
+        .then(response => response.json())
+        .then(json =>
+          {
+            if (json.success)
+            {
+              let artistTemp = [];
+
+              if (json.records.length !== 0)
+              {
+                for (let i = 0; i < json.records.length; i++)
+                {
+                  if (artistTemp.some(record => record.artist == json.records[i].artist) === false)
+                  {
+                    artistTemp.push(json.records[i]);
+                  }
+                }
+                
+                setSearchedArtists(artistTemp);
+                setFilteredRecords(json.records);
+                setShowResults(true);
+              }
+              else
+              {
+                setFilteredRecords([]);
+                setSearchedArtists([]);
+                setShowResults(false);
+              }
+            }
+            else
+            {
+              console.log("ERROR: " + json.message);
+            }
+          });
     }
     else
     {
+      setSearch("");
       setFilteredRecords([]);
       setSearchedArtists([]);
       setShowResults(false);

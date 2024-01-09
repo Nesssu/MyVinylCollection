@@ -39,6 +39,22 @@ router.get('/records/all/', (req, res, next) =>
       });
 });
 
+// Get the first 10 records that match the search
+router.get('/records/search/:value', (req, res, next) =>
+{
+  const value = req.params.value;
+
+  Records.find({ "artist": { "$regex": value, "$options": "i" } })
+    .then(docs =>
+      {
+        return res.json({success: true, records: docs});
+      })
+    .catch(err =>
+      {
+        return res.json({success: false, message: "Error while searching records!"})
+      })
+})
+
 // Add new record to the database.
 router.post('/add/new/record/', authenticateToken, (req, res, next) => 
 {

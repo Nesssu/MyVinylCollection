@@ -26,17 +26,20 @@ const authenticateToken = (req, res, next) =>
 }
 
 // Get all the vinyl record data and pictures from the database.
-router.get('/records/all/', (req, res, next) =>
+router.get('/fetch/records/:number', (req, res, next) =>
 {
-  Records.find({})
+  const nextLast = parseInt(req.params.number);
+  const nextFirst = nextLast - 15;
+
+  Records.find({ "number": { "$gte": nextFirst, "$lt": nextLast  } })
     .then(docs =>
       {
-        return res.json({success: true, records: docs})
+        return res.json({success: true, records: docs});
       })
     .catch(err =>
       {
-        return res.json({success: false, message: "Error while fetching the records from the database!"});
-      });
+        return res.json({success: false, message: err});
+      })
 });
 
 // Get the first 10 records that match the search

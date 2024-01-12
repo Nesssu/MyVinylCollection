@@ -67,7 +67,7 @@ const SearchBar = (props) =>
               {
                 for (let i = 0; i < json.records.length; i++)
                 {
-                  if (artistTemp.some(record => record.artist == json.records[i].artist) === false)
+                  if (artistTemp.some(record => record.artist === json.records[i].artist) === false)
                   {
                     artistTemp.push(json.records[i]);
                   }
@@ -177,7 +177,7 @@ const Home = (props) =>
 
     for (let i = 0; i < records.length; i++)
     {
-      if (records[i].artist == artist)
+      if (records[i].artist === artist)
       {
         temp.push(records[i]);
       }

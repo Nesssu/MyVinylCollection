@@ -39,7 +39,7 @@ router.get('/fetch/records/:number', (req, res, next) =>
     .catch(err =>
       {
         return res.json({success: false, message: err});
-      })
+      });
 });
 
 // Get the first 10 records that match the search

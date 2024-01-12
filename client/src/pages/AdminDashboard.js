@@ -168,10 +168,10 @@ const Record = (props) =>
 
   const checkUpdate = () =>
   {
-    if (title != titleHistory) return true;
-    if (artist != artistHistory) return true;
-    if (number != numberHistory) return true;
-    if (image != imageHistory) return true;
+    if (title !== titleHistory) return true;
+    if (artist !== artistHistory) return true;
+    if (number !== numberHistory) return true;
+    if (image !== imageHistory) return true;
 
     return false;
   }
@@ -321,7 +321,8 @@ const Record = (props) =>
   }
   useEffect(() =>
   {
-  }, [title, artist, number, image])
+  }, [title, artist, number, image]);
+
   useEffect(() =>
   {
     if (props.update && isFirstTime)
@@ -339,7 +340,7 @@ const Record = (props) =>
 
       setIsFirstTime(false);
     }
-  }, [props, title, artist, image, number]);
+  }, [props, title, artist, image, number, isFirstTime]);
 
   return (
     <div style={{'width': '100%', 'display': 'flex', 'flexDirection': 'column', 'alignItems': 'center'}} >
@@ -520,7 +521,7 @@ const AdminDashboard = (props) =>
 
   const searchBarOnClick = (number) =>
   {
-    const record = records.filter(record => record.number == number)[0];
+    const record = records.filter(record => record.number === number)[0];
     setSelectedRecord(record);
     setShowUpdate(true);
   }

@@ -311,11 +311,24 @@ const Home = (props) =>
         </div>
 
         <div className='AboutTextArea'>
+          <h4>Hi! My name is Nestori Kangashaka</h4>
+          <p className='AboutText'>
+            I'm a software engineer from Finland. I made this website for my portfolio.
+            I wanted to have a project to work on and I wanted it to be "useful" in somekind
+            of way. I started to collect records during the summer of 2022 and I quickly had
+            quite a lot of them. This website allows me to keep track of them and it also
+            helps my family members to know which records I have and which records they could
+            possibly give me as a present (emoji here).
+          </p>
+          <p className='AboutText TextForPortfolioLink'>
+            If you want to se my other projects, here's a link to my portfolio...
+          </p>
 
-        {/* TODO: ABOUT TEXT HERE */}
-
-          dwadawdawdawdwa
-
+          <div className='ArtistLinkArea'>
+            <p className='AboutText'>
+              The background image was created by <a className='Link'>John Doe</a>.
+            </p>
+          </div>
         </div>
       </div>
 

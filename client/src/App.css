@@ -34,6 +34,16 @@ h3
   color: white;
 }
 
+h4
+{
+  margin: 0 0 25px 0;
+  padding: 5px;
+  font-size: large;
+  font-family: 'Fraunces', serif;
+  font-weight: lighter;
+  color: black;
+}
+
 p
 {
   margin: 0;
@@ -621,15 +631,53 @@ p
   max-height: 100vh;
 }
 
+.AboutText
+{
+  font-family: 'Fraunces', serif;
+  font-size: medium;
+}
+
 .AboutTextArea
 {
   width: 100vw;
+  max-width: 600px;
   height: 100vh;
 
   display: flex;
+  text-align: justify;
+  text-justify: inter-word;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  margin: 15vh;
+}
+
+.TextForPortfolioLink
+{
+  margin: 50px 0 0 0;
+}
+
+.ArtistLinkArea
+{
+  display: flex;
+  position: absolute;
+  bottom: 30px;
+}
+
+.ArtistLinkArea .AboutText
+{
+  color: rgb(206, 206, 206);
+}
+
+.Link
+{
+  text-decoration: underline;
+  transition: all 0.25s;
+}
+
+.Link:hover
+{
+  cursor: pointer;
+  color: white;
 }
 
 .SearchBar

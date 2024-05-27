@@ -1,149 +1,10 @@
 import '../App.css';
-import { IoIosArrowRoundForward, IoIosArrowRoundBack, IoIosSearch } from "react-icons/io"
-import { RxCross1 } from "react-icons/rx";
+import { IoIosArrowRoundForward, IoIosArrowRoundBack } from "react-icons/io"
+import SearchBar from '../components/SearchBar';
+import Record from '../components/Record';
 import { useState, useRef, useEffect } from 'react';
 
-const Record = (props) =>
-{
-  return (
-    <div className='RecordBackground'>
-      <div className='RecordImage' style={{backgroundImage: `url(data:${props.contentType};base64,${props.image})`}}/>
-      <div className='HorizontalSeparator' style={{"width": "90%"}} />
-      <div className='RecordInfoArea'>
-        <p># {props.number}</p>
-        <p>{props.artist}</p>
-        <div style={{position: "relative", width: "100%", height: "100%", display: "flex", justifyContent: "center", margin: "0 0 20px 0"}} >
-          <p style={{position: "absolute"}} >{props.title}</p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-const SearchResultItem = (props) =>
-{
-  const [artist, setArtist] = useState("");
-
-  useEffect(() =>
-  {
-    setArtist(props.artist);
-  }, [props])
-
-  return (
-    <div className='SearchBarResultItem' onClick={() => {props.searchBarOnClick(artist); props.setClearSearch(true); props.setSearch(artist); }} >
-      <p>{artist}</p>
-    </div>
-  );
-}
-
-const SearchBar = (props) =>
-{
-  const [showResults, setShowResults] = useState(false);
-  const [filteredRecords, setFilteredRecords] = useState([]);
-  const [searchedArtists, setSearchedArtists] = useState([]);
-  const [search, setSearch] = useState("");
-  const [clearSearch, setClearSearch] = useState(false);
-
-  const handleSearchChange = (event) =>
-  {
-    if (event.target.value !== "")
-    {
-      setSearch(event.target.value);
-
-      fetch('/api/records/search/' + event.target.value, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json"
-        }
-      })
-        .then(response => response.json())
-        .then(json =>
-          {
-            if (json.success)
-            {
-              let artistTemp = [];
-
-              if (json.records.length !== 0)
-              {
-                for (let i = 0; i < json.records.length; i++)
-                {
-                  if (artistTemp.some(record => record.artist === json.records[i].artist) === false)
-                  {
-                    artistTemp.push(json.records[i]);
-                  }
-                }
-                
-                setSearchedArtists(artistTemp);
-                setFilteredRecords(json.records);
-                setShowResults(true);
-              }
-              else
-              {
-                setFilteredRecords([]);
-                setSearchedArtists([]);
-                setShowResults(false);
-              }
-            }
-            else
-            {
-              console.log("ERROR: " + json.message);
-            }
-          });
-    }
-    else
-    {
-      setSearch("");
-      setFilteredRecords([]);
-      setSearchedArtists([]);
-      setShowResults(false);
-    }
-  }
-
-  const handleKeyDown = (event) =>
-  {
-    if (event.keyCode === 13)
-    {
-      if (search !== "" && filteredRecords.length > 0)
-      {
-        setClearSearch(true);
-        props.searchBarSearch(filteredRecords);
-      }
-    }
-  }
-
-  useEffect(() =>
-  {
-    if (clearSearch)
-    {
-      setFilteredRecords([]);
-      setSearchedArtists([]);
-      setShowResults(false);
-      setClearSearch(false);
-    }
-  }, [showResults, filteredRecords, clearSearch]);
-
-  return (
-    <div className='SearchBarBackground'>
-      <div className='SearchBarInputArea'>
-        <IoIosSearch className='SearchBarIcon' />
-        <input type='text' className='SearchBarInput' onChange={handleSearchChange} onKeyDown={handleKeyDown} value={search} placeholder='Search for artists' />
-        {props.allowSearchClear && <RxCross1 className='SearchBarIcon Hover' onClick={() => { props.searchBarSearch(props.records); props.setAllowSearchClear(false); setSearch(""); }} />}
-      </div>
-      {showResults && (
-        <div className='SearchBarResultArea'>
-          <div className='HorizontalSeparator' />
-          {
-            searchedArtists.slice(0, 10).map(record =>  (
-                <SearchResultItem key={record._id} artist={record.artist} searchBarOnClick={props.searchBarOnClick} setClearSearch={setClearSearch} setSearch={setSearch} />
-            ))
-          }
-        </div>
-      )}
-    </div>
-  )
-}
-
-const Home = (props) =>
+const Home = () =>
 {
   const homeRef = useRef(null);
   const aboutRef = useRef(null);
@@ -162,6 +23,7 @@ const Home = (props) =>
     {
       ref.current.scrollIntoView();
       currentRef.current = ref.current;
+      sessionStorage.setItem('my_vinyl_collection_ref', ref.current.className);
     }
   }
 
@@ -197,23 +59,24 @@ const Home = (props) =>
   {
     // When the user switches between the home and about views, the data is stored to localStorage
     // so when the user reloads the page it stays on the right page.
-    const storedRef = localStorage.getItem('my_vinyl_collection_ref');
+    const storedRef = sessionStorage.getItem('my_vinyl_collection_ref');
+    console.log(storedRef);
 
     if (storedRef && currentRef)
     {
-      currentRef.current = JSON.parse(storedRef);
+      if (storedRef === "About")
+      {
+        setDisableScroll(true);
+        document.body.style.overflowY = "hidden";
+        scrollToRef(aboutRef);
+      }
+      else
+      {
+        setDisableScroll(false);
+        document.body.style.overflowY = "scroll";
+        scrollToRef(homeRef);
+      }
     }
-
-    if (currentRef)
-    {
-      scrollToRef(currentRef);
-    }
-    else
-    {
-      scrollToRef(homeRef);
-    }
-
-
 
     const handleResize = () =>
     {
@@ -272,7 +135,11 @@ const Home = (props) =>
   }, [recordsToDisplay, disableScroll]);
 
   return (
-    <div className="Home">
+    <div className="Home" style={{backgroundColor: disableScroll ? "#A9B388" : "#5F6F52"}}>
+
+
+      {/* HERE STARTS THE CODE FOR THE VINYL COLLECTION VIEW */}
+
 
       <div className='VinylCollection' ref={homeRef}>
         <div className="Header">
@@ -285,13 +152,21 @@ const Home = (props) =>
             <SearchBar records={records} searchBarOnClick={searchBarOnClick} searchBarSearch={searchBarSearch} allowSearchClear={allowSearchClear} setAllowSearchClear={setAllowSearchClear} />
           </div>
 
-          <div className='RecordList'>
-            {
-              recordsToDisplay.map((record) => (
-                <Record artist={record.artist} title={record.title} number={record.number} key={record._id} image={record.image} contentType={record.contentType}/>
-              ))
-            }
-          </div>
+          { recordsToDisplay.length > 0 ?
+            (
+              <div className='RecordList'>
+                {recordsToDisplay.map((record) => (
+                  <Record artist={record.artist} title={record.title} number={record.number} key={record._id} image={record.image} contentType={record.contentType}/>
+                ))}
+              </div>
+            )
+            :
+            (
+              <div style={{width: "100%", display: "flex", justifyContent: "center", margin: "30vh 0 0 0"}}>
+                <p>{"If you see this message there is an issue with the website, because me not having records is impossible!"}</p>
+              </div>
+            )
+          }
 
           {moreToCome && (
             <div className='LoadMoreButton' onClick={loadMoreClick}>
@@ -303,32 +178,29 @@ const Home = (props) =>
       </div>
 
 
+      {/* HERE STARTS THE CODE FOR THE ABOUT VIEW */}
+
 
       <div className='About' ref={aboutRef}>
         <div className="Header">
           <h2 className='AboutHeaderLink' onClick={() =>  { scrollToRef(homeRef); setDisableScroll(false); }}><IoIosArrowRoundBack className='HeaderIcon' />Back</h2>
-          <h1>About</h1>
         </div>
 
-        <div className='AboutTextArea'>
-          <h4>Hi! My name is Nestori Kangashaka</h4>
-          <p className='AboutText'>
-            I'm a software engineer from Finland. I made this website for my portfolio.
-            I wanted to have a project to work on and I wanted it to be "useful" in somekind
-            of way. I started to collect records during the summer of 2022 and I quickly had
-            quite a lot of them. This website allows me to keep track of them and it also
-            helps my family members to know which records I have and which records they could
-            possibly give me as a present (emoji here).
-          </p>
-          <p className='AboutText TextForPortfolioLink'>
-            If you want to se my other projects, here's a link to my portfolio...
-          </p>
+        <h4 className='AboutTitle'>ABOUT</h4>
 
-          <div className='ArtistLinkArea'>
-            <p className='AboutText'>
-              The background image was created by <a className='Link'>John Doe</a>.
-            </p>
-          </div>
+        <div className='AboutTextArea'>
+          <p className='AboutText'>
+            Hi! My name is Nestori and I'm a software engineer from Finland. I made this website 
+            for my portfolio because I wanted to have a project to work on. I wanted it to be 
+            "useful" in some kind of way and this was the first idea that came to my mind. I 
+            started to collect records during the summer of 2022 and I quickly had quite a lot. 
+            This website allows me to keep track of them and it also helps my family members 
+            to know which records I have and which records they could possibly give me as 
+            presents. 🥰
+          </p>
+          <p className='AboutText PortfolioLinkText'>
+            If you want to see my other projects, here's a link to my portfolio...
+          </p>
         </div>
       </div>
 

@@ -163,6 +163,17 @@ p
   background-position: center;
 }
 
+.AdminDashboardLoadingArea
+{
+  width: 100%;
+  height: 100vh;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .DashboardHeaderArea
 {
   padding: 25px 0 25px 0;
@@ -532,17 +543,13 @@ p
 
 .Home
 {
-  background-image: url('../src/media/home_background.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: bottom;
-
+  background-color: #5F6F52;
   display: flex;
   flex-direction: row;
   overflow-x: hidden;
   overflow-y: hidden;
   scroll-behavior: smooth;
+  transition: all 0.5s;
 }
 
 .VinylCollection
@@ -611,7 +618,7 @@ p
 
   position: absolute;
   padding: 0;
-  margin: 0;
+  margin: 40px 0 0 0;
   left: 5%;
 }
 
@@ -626,20 +633,44 @@ p
   flex-direction: column;
   align-items: center;
   position: relative;
-
+  
   min-width: 100vw;
   max-height: 100vh;
+}
+
+.AboutTitle
+{
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+  font-size: clamp(4rem, 2.5rem + 4vw, 7rem);
+
+  background-image: url('./media/home_background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: bottom;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
 }
 
 .AboutText
 {
   font-family: 'Fraunces', serif;
-  font-size: medium;
+  font-size: clamp(0.8rem, 0.3rem + 0.8vw, 1.5rem);
+}
+
+.PortfolioLinkText
+{
+  text-align: center;
+  position: absolute;
+  right: auto;
+  left: auto;
+  bottom: 50px;
 }
 
 .AboutTextArea
 {
-  width: 100vw;
+  width: 80%;
   max-width: 600px;
   height: 100vh;
 
@@ -648,36 +679,6 @@ p
   text-justify: inter-word;
   flex-direction: column;
   align-items: center;
-  margin: 15vh;
-}
-
-.TextForPortfolioLink
-{
-  margin: 50px 0 0 0;
-}
-
-.ArtistLinkArea
-{
-  display: flex;
-  position: absolute;
-  bottom: 30px;
-}
-
-.ArtistLinkArea .AboutText
-{
-  color: rgb(206, 206, 206);
-}
-
-.Link
-{
-  text-decoration: underline;
-  transition: all 0.25s;
-}
-
-.Link:hover
-{
-  cursor: pointer;
-  color: white;
 }
 
 .SearchBar

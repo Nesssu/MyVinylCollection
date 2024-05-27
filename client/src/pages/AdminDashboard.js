@@ -6,6 +6,7 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ConfirmDialog } from 'primereact/confirmdialog';
+import { newtonsCradle } from 'ldrs'
 
 const showToast = (message, type) =>
   {
@@ -401,6 +402,7 @@ const AdminDashboard = (props) =>
   const [records, setRecords] = useState([]);
   const [selectedRecord, setSelectedRecord] = useState({});
   const [showUpdate, setShowUpdate] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -528,32 +530,52 @@ const AdminDashboard = (props) =>
 
   useEffect(() =>
   {
-    // Get all the records from the db.
-    fetch('/api/records/all/', {
-      method: "GET",
-      headers: {
-          "Content-Type": "application/json",
-          "authorization": props.jwt
-      }
-    })
-    .then(response => response.json())
-    .then(json => 
-      {
-        if (json.success)
-        {
-          setRecords(json.records);
+    let mounted = true;
+    setLoading(true);
+
+    const fetchRecords = async () =>
+    {
+      // Get all the records from the db.
+      fetch('/api/records/all/', {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "authorization": props.jwt
         }
-        else
+      })
+      .then(response => response.json())
+      .then(json => 
         {
-          showToast(json.message, "warning");
+          if (json.success)
+          {
+            setRecords(json.records);
+          }
+          else
+          {
+            showToast(json.message, "warning");
+          }
         }
-      }
-    )
+      )
+    }
+
+    
+    fetchRecords(); 
+    newtonsCradle.register();
+
+    // Wait ten seconds so I can work on the loading animations
+    setTimeout(() =>
+    {
+      setLoading(false);
+    }, 2500);
+
+    return () =>
+    {
+      mounted = false;
+    }
   }, [props, navigate, showUpdate]);
 
   return (
     <div className="AdminDashboard">
-
       <div className="DashboardHeaderArea">
         <div className="DashboardTitle">
           <h1>Admin Dashboard</h1>
@@ -562,54 +584,66 @@ const AdminDashboard = (props) =>
         <input type="Button" value="Log Out" className="DashboardLogoutButton" onClick={logout} />
       </div>
 
-      <div className="AddAndUpdateArea">
-
-        <div className="UpdateArea">
-          <h2>Update Record</h2>
-          <SearchBar searchBarOnClick={searchBarOnClick} records={records} />
-
-          <div className='HorizontalSeparator' style={{width: '50%', margin: '80px 0 20px 0'}} />
-
-          {showUpdate ? (
-            <Record 
-              update={true} 
-              jwt={props.jwt} 
-              artist={selectedRecord.artist} 
-              title={selectedRecord.title} 
-              number={selectedRecord.number} 
-              image={selectedRecord.image}
-              contentType={selectedRecord.contentType}
-              _id={selectedRecord._id}
-              setSelectedRecord={setSelectedRecord}
-              setShowUpdate={setShowUpdate}
-            />
-          )
-          :
-          (
-            <h3 style={{color: "#888"}}>Search records to edit them</h3>
-          )
-          }
-        </div>
-
-        <div className="AddArea">
-          <Record update={false} jwt={props.jwt} />
-
-          <div className="AdminCredentialsArea">
-            <h2>Update Admin Credentials</h2>
-            
-            <h3 style={{'marginTop': '30px'}} >Update ID</h3>
-            <input className='AdminDashboardInput' type='Text' placeholder='ID' value={ID} onChange={handleIDChange} />
-            <input className='AdminDashboardInput' type='Text' placeholder='Confirm ID' value={confirmedID} onChange={handleConfirmedIDChange} />
-            <input className='AdminDashboardButton' type='Button' value='Save' onClick={handleIDUpdate} />
-
-            <h3 style={{'marginTop': '30px'}} >Update password</h3>
-            <input className='AdminDashboardInput' type='Password' placeholder='New password' value={password} onChange={handlePasswordChange} />
-            <input className='AdminDashboardInput' type='Password' placeholder='Confirm password' value={confirmedPassword} onChange={handleConfirmedPasswordChange} />
-            <input className='AdminDashboardButton' type='Button' value='Save' onClick={handlePasswordUpdate} />
+      {loading ?
+        (
+          <div className='AdminDashboardLoadingArea'>
+            <l-newtons-cradle
+              size="150"
+              speed="1.5"
+              color="#FFFFFF"
+            ></l-newtons-cradle>
           </div>
-
-        </div>
-      </div>
+        )
+        :
+        (
+          <div className="AddAndUpdateArea">
+            <div className="UpdateArea">
+              <h2>Update Record</h2>
+              <SearchBar searchBarOnClick={searchBarOnClick} records={records} />
+    
+              <div className='HorizontalSeparator' style={{width: '50%', margin: '80px 0 20px 0'}} />
+    
+              {showUpdate ? (
+                <Record 
+                  update={true} 
+                  jwt={props.jwt} 
+                  artist={selectedRecord.artist} 
+                  title={selectedRecord.title} 
+                  number={selectedRecord.number} 
+                  image={selectedRecord.image}
+                  contentType={selectedRecord.contentType}
+                  _id={selectedRecord._id}
+                  setSelectedRecord={setSelectedRecord}
+                  setShowUpdate={setShowUpdate}
+                />
+              )
+              :
+              (
+                <h3 style={{color: "#888"}}>Search records to edit them</h3>
+              )
+              }
+              </div>
+  
+            <div className="AddArea">
+              <Record update={false} jwt={props.jwt} />
+    
+              <div className="AdminCredentialsArea">
+                <h2>Update Admin Credentials</h2>
+                
+                <h3 style={{'marginTop': '30px'}} >Update ID</h3>
+                <input className='AdminDashboardInput' type='Text' placeholder='ID' value={ID} onChange={handleIDChange} />
+                <input className='AdminDashboardInput' type='Text' placeholder='Confirm ID' value={confirmedID} onChange={handleConfirmedIDChange} />
+                <input className='AdminDashboardButton' type='Button' value='Save' onClick={handleIDUpdate} />
+    
+                <h3 style={{'marginTop': '30px'}} >Update password</h3>
+                <input className='AdminDashboardInput' type='Password' placeholder='New password' value={password} onChange={handlePasswordChange} />
+                <input className='AdminDashboardInput' type='Password' placeholder='Confirm password' value={confirmedPassword} onChange={handleConfirmedPasswordChange} />
+                <input className='AdminDashboardButton' type='Button' value='Save' onClick={handlePasswordUpdate} />
+              </div>
+            </div>
+          </div>
+        )
+      }
 
       <ToastContainer/>
     </div>

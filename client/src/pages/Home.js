@@ -10,6 +10,9 @@ const Home = () =>
   const aboutRef = useRef(null);
   const currentRef = useRef(null);
 
+  const background_HomePage = "#4C6444";
+  const background_AboutPage = "#CABA9C";
+
   const [records, setRecords] = useState([]);
   const [recordsToDisplay, setRecordsToDisplay] = useState([]);
   const [disableScroll, setDisableScroll] = useState(false);
@@ -135,7 +138,7 @@ const Home = () =>
   }, [recordsToDisplay, disableScroll]);
 
   return (
-    <div className="Home" style={{backgroundColor: disableScroll ? "#A9B388" : "#5F6F52"}}>
+    <div className="Home" style={{backgroundColor: disableScroll ? background_AboutPage : background_HomePage}}>
 
 
       {/* HERE STARTS THE CODE FOR THE VINYL COLLECTION VIEW */}
@@ -143,20 +146,27 @@ const Home = () =>
 
       <div className='VinylCollection' ref={homeRef}>
         <div className="Header">
-          <h1>My Vinyl Collection</h1>
           <h2 className='HomeHeaderLink' onClick={() => { scrollToRef(aboutRef); setDisableScroll(true); }} >About <IoIosArrowRoundForward className='HeaderIcon' /></h2>
         </div>
 
+        <h4 className='HomeTitle'>MY VINYL COLLECTION</h4>
+
         <div className="CollectionBackground">
           <div className='SearchBar'>
-            <SearchBar records={records} searchBarOnClick={searchBarOnClick} searchBarSearch={searchBarSearch} allowSearchClear={allowSearchClear} setAllowSearchClear={setAllowSearchClear} />
+            <div className='HorizontalLineForSearchBar' />
+            <div style={{display: "flex", flexDirection: "row", width: "100%", position: "relative"}}>
+              <div className='VerticalLineForSearchBar' style={{left: "0"}} />
+              <SearchBar records={records} searchBarOnClick={searchBarOnClick} searchBarSearch={searchBarSearch} allowSearchClear={allowSearchClear} setAllowSearchClear={setAllowSearchClear} />
+              <div className='VerticalLineForSearchBar' style={{right: "0"}} />
+            </div>
+            <div className='HorizontalLineForSearchBar' />
           </div>
 
           { recordsToDisplay.length > 0 ?
             (
               <div className='RecordList'>
-                {recordsToDisplay.map((record) => (
-                  <Record artist={record.artist} title={record.title} number={record.number} key={record._id} image={record.image} contentType={record.contentType}/>
+                {recordsToDisplay.map((record, index) => (
+                  <Record artist={record.artist} title={record.title} number={record.number} key={record._id} image={record.image} contentType={record.contentType} />
                 ))}
               </div>
             )

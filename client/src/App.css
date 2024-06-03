@@ -428,12 +428,6 @@ p
   font-family: 'Fraunces', serif;
 }
 
-.SearchBarIcon
-{
-  color: #888;
-  font-size: x-large;
-}
-
 .HorizontalSeparator
 {
   height: 1px;
@@ -558,10 +552,11 @@ p
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
   min-width: 100vw;  
   position: relative;
-
   margin: 0;
+  padding: 0;
 }
 
 .CollectionBackground
@@ -596,14 +591,14 @@ p
 {
   font-family: 'Fraunces', serif;
   text-align: center;
-  color: black;
+  color: #CABA9C;
   display: flex;
   flex-direction: row;
   align-items: center;
-
+  font-weight: 900;
   position: absolute;
   padding: 0;
-  margin: 0;
+  margin: 40px 0 0 0;
   right: 5%;
 }
 
@@ -611,11 +606,11 @@ p
 {
   font-family: 'Fraunces', serif;
   text-align: center;
-  color: black;
+  color: #4D2D18;
   display: flex;
   flex-direction: row;
   align-items: center;
-
+  font-weight: 900;
   position: absolute;
   padding: 0;
   margin: 40px 0 0 0;
@@ -627,13 +622,23 @@ p
   cursor: pointer;
 }
 
+.HomeTitle
+{
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+  font-weight: 900;
+  font-size: clamp(4rem, 2.5rem + 4vw, 7rem);
+  color: #CABA9C;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
 .About
 {
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
-  
   min-width: 100vw;
   max-height: 100vh;
 }
@@ -642,13 +647,9 @@ p
 {
   margin-top: 10vh;
   margin-bottom: 10vh;
+  font-weight: 900;
   font-size: clamp(4rem, 2.5rem + 4vw, 7rem);
-
-  background-image: url('./media/home_background.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: bottom;
-  color: transparent;
+  color: #4D2D18;
   background-clip: text;
   -webkit-background-clip: text;
 }
@@ -656,6 +657,7 @@ p
 .AboutText
 {
   font-family: 'Fraunces', serif;
+  color: #4D2D18;
   font-size: clamp(0.8rem, 0.3rem + 0.8vw, 1.5rem);
 }
 
@@ -690,22 +692,43 @@ p
   position: absolute;
   margin: 20px 0 0 0;
   padding: 10px;
-  width: 50%;
+  width: 75%;
   min-width: 100px;
   max-width: 500px;
 }
 
+.SearchBarIcon
+{
+  color: #102820;
+  font-size: x-large;
+}
+
+.HorizontalLineForSearchBar
+{
+  height: 2px;
+  background-color: #102820;
+  width: calc(100% + 30%);
+}
+
+.VerticalLineForSearchBar
+{
+  width: 2px;
+  background-color: #102820;
+  height: 100px;
+  position: absolute;
+  top: 50%;
+  margin: auto;
+  transform: translateY(-50%);
+}
+
 .SearchBarBackground
 {
-  background-color: #F6EEE3;
+  background-color: transparent;
   padding: 10px;
   width: 100%;
   min-width: 100px;
   max-width: 500px;
-
   border: none;
-  border-radius: 10px;
-  box-shadow: 0px 0px 15px #888;
 }
 
 .SearchBarInputArea
@@ -747,25 +770,26 @@ p
 
   font-size: small;
   font-family: 'Fraunces', serif;
-  background-color: #F6EEE3;
+  font-weight: 900;
+  background-color: transparent;
+  color: #102820;
 }
 
 .RecordBackground
 {
-  background-color: #F6EEE3;
-  padding: 20px 20px 30px 20px;
+  background-color: #102820;
   border: none;
-  border-radius: 10px;
-  margin: 20px;
-  box-shadow: 0px 0px 15px #888;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
   width: 80%;
   min-width: 100px;
   max-width: 250px;
+
+  padding-top: 30px;
+  padding-bottom: 40px;
+  padding-left: calc((100vw - (250px * 3)) / 6);
+  padding-right: calc((100vw - (250px * 3)) / 6);
 }
 
 .RecordInfoArea
@@ -779,32 +803,47 @@ p
   width: 100%;
 }
 
+.RecordInfoArea p
+{
+  color: #CABA9C;
+}
+
 .RecordImage
 {
   width: 100%;
-  max-width: 300px;
+  max-width: 250px;
   height: auto;
   aspect-ratio: 1/1;
   border: none;
-  border-radius: 5px;
+  border-radius: 2px;
   background-size: cover;
   background-position: center;
   margin: 0 0 15px 0;
-  box-shadow: 0 0 5px #888;
 }
 
 .RecordList
 {
   display: grid;
-  grid-template-columns: 300px 300px 300px;
-  column-gap: 30px;
-  row-gap: 30px;
-  align-items: center;
-  justify-content: center;
-  
-  width: 100vw;
-  margin: 100px 0 20px 0;
+  row-gap: 150px;
+  justify-items: center;
+  margin: 200px 0 20px 0;
   padding: 10px 0 40px 0;
+}
+
+@media only screen and (max-width: 940px) 
+{
+  .RecordList
+  {
+    grid-template-columns: repeat(2, calc(100vw / 2));
+  }  
+}
+
+@media only screen and (min-width: 941px) 
+{
+  .RecordList
+  {
+    grid-template-columns: repeat(3, calc(100vw / 3));
+  }  
 }
 
 .LoadMoreButton 

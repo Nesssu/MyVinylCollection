@@ -5,7 +5,7 @@ const Record = (props) =>
   return (
     <div className='RecordBackground'>
       <div className='RecordImage' style={{backgroundImage: `url(data:${props.contentType};base64,${props.image})`}}/>
-      <div className='HorizontalSeparator' style={{"width": "90%"}} />
+      <div className='HorizontalSeparator' style={{width: "90%", backgroundColor: "#CABA9C"}} />
       <div className='RecordInfoArea'>
         <p># {props.number}</p>
         <p>{props.artist}</p>

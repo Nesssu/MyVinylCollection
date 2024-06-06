@@ -15,6 +15,7 @@ const Home = () =>
 
   const [records, setRecords] = useState([]);
   const [recordsToDisplay, setRecordsToDisplay] = useState([]);
+  const [newRecordList, setNewRecordList] = useState([]);
   const [disableScroll, setDisableScroll] = useState(false);
   const [allowSearchClear, setAllowSearchClear] = useState(false);
   const [loadRecordsTo, setLoadReacordsTo] = useState(16);
@@ -58,12 +59,127 @@ const Home = () =>
     setAllowSearchClear(true);
   }
 
+  const GetGroupSizeBasedOnWindowWidth = () =>
+  {
+    const widthOfWindow = window.innerWidth;
+
+    if (widthOfWindow >= 1050)
+    {
+      return 3;
+    }
+    else if (widthOfWindow >= 650 && widthOfWindow < 1050)
+    {
+      return 2;
+    }
+    else
+    {
+      return 1;
+    }
+  }
+
+  const DivideRecordsIntoGroupsOfNumFromList = (num, listOfRecords) =>
+  {
+    let newList = [];
+    let temp = [];
+    let i = num;
+
+    listOfRecords.forEach(record =>
+    {
+        temp.push(record);
+        i--;
+
+        if (i <= 0)
+        {
+          newList.push(temp);
+          
+          i = num;
+          temp = [];
+        }
+
+        if (listOfRecords.indexOf(record) == listOfRecords.length - 1 && temp.length != 0)
+        {
+          newList.push(temp);
+        }
+    });
+
+    setNewRecordList(newList);
+  }
+
+  const handleResize = () =>
+  {
+    if (currentRef.current) 
+    {
+      currentRef.current.scrollIntoView();
+    }
+    else if (homeRef.current)
+    {
+      homeRef.current.scrollIntoView();
+    }
+
+    const widthOfWindow = window.innerWidth;
+    
+    // If the width of the window is bigger than 1050px, show three records in one row
+    if (widthOfWindow >= 1050)
+    {
+      DivideRecordsIntoGroupsOfNumFromList(3, recordsToDisplay);
+    }
+
+    // If the width of the window is bigger than 650px, show two records in one row
+    if (widthOfWindow >= 650 && widthOfWindow < 1050)
+    {
+      DivideRecordsIntoGroupsOfNumFromList(2, recordsToDisplay);
+    }
+
+    // If the width of the window is smaller than 650px, show one record per row
+    if (widthOfWindow < 650)
+    {
+      DivideRecordsIntoGroupsOfNumFromList(1, recordsToDisplay);
+    }
+  }
+
+  const fetchRecords = async () =>
+  {
+    const response = await fetch('/api/fetch/records/' + loadRecordsTo.toString(), {
+      method: "GET",
+      headers: {
+          "Content-Type": "application/json"
+      }
+    });
+    
+    if (response)
+    {
+      const json = await response.json();
+      if (json)
+      {
+        if (json.success)
+        {
+          const temp = json.records.sort((a, b) => a.number - b.number);
+          setRecords([...records, ...temp]);
+          setRecordsToDisplay([...records, ...json.records]);
+
+          const groupSize = GetGroupSizeBasedOnWindowWidth();
+          DivideRecordsIntoGroupsOfNumFromList(groupSize, [...records, ...json.records]);
+
+          if (temp.length === 15)
+          {
+            setMoreToCome(true);
+          }
+          else
+          {
+            setMoreToCome(false);
+          }
+        }
+      }
+    }
+  }
+
   useState(() =>
   {
+    fetchRecords();
+
     // When the user switches between the home and about views, the data is stored to localStorage
     // so when the user reloads the page it stays on the right page.
     const storedRef = sessionStorage.getItem('my_vinyl_collection_ref');
-    console.log(storedRef);
 
     if (storedRef && currentRef)
     {
@@ -81,18 +197,6 @@ const Home = () =>
       }
     }
 
-    const handleResize = () =>
-    {
-        if (currentRef.current) 
-        {
-          currentRef.current.scrollIntoView();
-        }
-        else if (homeRef.current)
-        {
-          homeRef.current.scrollIntoView();
-        }
-    }
-
     window.addEventListener("resize", handleResize);
 
     return () =>
@@ -100,36 +204,6 @@ const Home = () =>
         window.removeEventListener("resize", handleResize);
     }
     
-  }, []);
-
-  useEffect(() =>
-  {
-    fetch('/api/fetch/records/' + loadRecordsTo.toString(), {
-      method: "GET",
-      headers: {
-          "Content-Type": "application/json"
-      }
-    })
-    .then(response => response.json())
-    .then(json => 
-      {
-        if (json.success)
-        {
-          const temp = json.records.sort((a, b) => a.number - b.number);
-          setRecords([...records, ...temp]);
-          setRecordsToDisplay([...records, ...json.records]);
-
-          if (temp.length === 15)
-          {
-            setMoreToCome(true);
-          }
-          else
-          {
-            setMoreToCome(false);
-          }
-        }
-      }
-    )
   }, [loadRecordsTo]);
 
   useEffect(() =>

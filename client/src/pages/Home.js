@@ -15,11 +15,10 @@ const Home = () =>
 
   const [records, setRecords] = useState([]);
   const [recordsToDisplay, setRecordsToDisplay] = useState([]);
-  const [newRecordList, setNewRecordList] = useState([]);
   const [disableScroll, setDisableScroll] = useState(false);
   const [allowSearchClear, setAllowSearchClear] = useState(false);
-  const [loadRecordsTo, setLoadReacordsTo] = useState(16);
-  const [moreToCome, setMoreToCome] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [update, setUpdate] = useState(false);
 
   const scrollToRef = (ref) =>
   {
@@ -29,12 +28,6 @@ const Home = () =>
       currentRef.current = ref.current;
       sessionStorage.setItem('my_vinyl_collection_ref', ref.current.className);
     }
-  }
-
-  const loadMoreClick = () =>
-  {
-    const nextLast = loadRecordsTo + 15;
-    setLoadReacordsTo(nextLast);
   }
 
   const searchBarOnClick = (artist) =>
@@ -102,10 +95,11 @@ const Home = () =>
         }
     });
 
-    setNewRecordList(newList);
+    setRecordsToDisplay(newList);
+    setLoading(false);
   }
 
-  const handleResize = () =>
+  const handleResize = async () =>
   {
     if (currentRef.current) 
     {
@@ -117,29 +111,37 @@ const Home = () =>
     }
 
     const widthOfWindow = window.innerWidth;
+
+
+    const noRecordsAvailable = recordsToDisplay.length == 0 || records.length == 0;
+
+    if (noRecordsAvailable)
+    {
+      await fetchRecords();
+    }
     
     // If the width of the window is bigger than 1050px, show three records in one row
-    if (widthOfWindow >= 1050)
+    if (!noRecordsAvailable && widthOfWindow >= 1050)
     {
-      DivideRecordsIntoGroupsOfNumFromList(3, recordsToDisplay);
+      DivideRecordsIntoGroupsOfNumFromList(3, records);
     }
 
     // If the width of the window is bigger than 650px, show two records in one row
-    if (widthOfWindow >= 650 && widthOfWindow < 1050)
+    if (!noRecordsAvailable && widthOfWindow >= 650 && widthOfWindow < 1050)
     {
-      DivideRecordsIntoGroupsOfNumFromList(2, recordsToDisplay);
+      DivideRecordsIntoGroupsOfNumFromList(2, records);
     }
 
     // If the width of the window is smaller than 650px, show one record per row
-    if (widthOfWindow < 650)
+    if (!noRecordsAvailable && widthOfWindow < 650)
     {
-      DivideRecordsIntoGroupsOfNumFromList(1, recordsToDisplay);
+      DivideRecordsIntoGroupsOfNumFromList(1, records);
     }
   }
 
   const fetchRecords = async () =>
   {
-    const response = await fetch('/api/fetch/records/' + loadRecordsTo.toString(), {
+    const response = await fetch('/api/records/all', {
       method: "GET",
       headers: {
           "Content-Type": "application/json"
@@ -153,21 +155,10 @@ const Home = () =>
       {
         if (json.success)
         {
-          const temp = json.records.sort((a, b) => a.number - b.number);
-          setRecords([...records, ...temp]);
-          setRecordsToDisplay([...records, ...json.records]);
-
+          const sortedRecordsList = json.records.sort((a, b) => a.number - b.number);
+          setRecords(sortedRecordsList);
           const groupSize = GetGroupSizeBasedOnWindowWidth();
-          DivideRecordsIntoGroupsOfNumFromList(groupSize, [...records, ...json.records]);
-
-          if (temp.length === 15)
-          {
-            setMoreToCome(true);
-          }
-          else
-          {
-            setMoreToCome(false);
-          }
+          DivideRecordsIntoGroupsOfNumFromList(groupSize, sortedRecordsList);
         }
       }
     }
@@ -175,6 +166,8 @@ const Home = () =>
 
   useState(() =>
   {
+    console.log("Update ran!");
+    setLoading(true);
     fetchRecords();
 
     // When the user switches between the home and about views, the data is stored to localStorage
@@ -204,12 +197,12 @@ const Home = () =>
         window.removeEventListener("resize", handleResize);
     }
     
-  }, [loadRecordsTo]);
+  }, [update]);
 
   useEffect(() =>
   {
     document.body.style.overflowY = disableScroll ? "hidden" : "scroll";
-  }, [recordsToDisplay, disableScroll]);
+  }, [disableScroll]);
 
   return (
     <div className="Home" style={{backgroundColor: disableScroll ? background_AboutPage : background_HomePage}}>
@@ -236,27 +229,44 @@ const Home = () =>
             <div className='HorizontalLineForSearchBar' />
           </div>
 
-          { recordsToDisplay.length > 0 ?
+          { loading ?
             (
-              <div className='RecordList'>
-                {recordsToDisplay.map((record, index) => (
-                  <Record artist={record.artist} title={record.title} number={record.number} key={record._id} image={record.image} contentType={record.contentType} />
-                ))}
+              <div style={{margin: "200px 0 0 0"}}>
+                {/* TODO: Loading animation */}
+                <p>Loading...</p>
               </div>
             )
             :
             (
-              <div style={{width: "100%", display: "flex", justifyContent: "center", margin: "30vh 0 0 0"}}>
-                <p>{"If you see this message there is an issue with the website, because me not having records is impossible!"}</p>
+              <div style={{width: "100%", height: "100%"}}>
+                { recordsToDisplay.length > 0 ?
+                  (
+                    <div className='RecordList'>
+                      {
+                        recordsToDisplay.map((recordRow, index) => 
+                        (
+                          <div className='RecordListRow' key={index}>
+                            {
+                              recordRow.map((record) =>
+                              (
+                                <Record artist={record.artist} title={record.title} number={record.number} key={record._id} image={record.image} contentType={record.contentType} />
+                              ))
+                            }
+                          </div>
+                        ))
+                      }
+                    </div>
+                  )
+                  :
+                  (
+                    <div style={{width: "100%", display: "flex", justifyContent: "center", margin: "30vh 0 0 0"}}>
+                      <p>{"If you see this message there is an issue with the website, because me not having records is impossible!"}</p>
+                    </div>
+                  )
+                }
               </div>
             )
           }
-
-          {moreToCome && (
-            <div className='LoadMoreButton' onClick={loadMoreClick}>
-              Load More
-            </div>  
-          )}
 
         </div>
       </div>

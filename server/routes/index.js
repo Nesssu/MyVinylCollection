@@ -26,7 +26,7 @@ const authenticateToken = (req, res, next) =>
 }
 
 // for the admin dashboard there will be a fetch all get route. 
-router.get('/records/all', authenticateToken, async (req, res, next) =>
+router.get('/records/all', async (req, res, next) =>
 {
   Records.find({})
   .then(docs =>
@@ -40,23 +40,6 @@ router.get('/records/all', authenticateToken, async (req, res, next) =>
     }
   );
 })
-
-// Get all the vinyl record data and pictures from the database.
-router.get('/fetch/records/:number', (req, res, next) =>
-{
-  const nextLast = parseInt(req.params.number);
-  const nextFirst = nextLast - 15;
-
-  Records.find({ "number": { "$gte": nextFirst, "$lt": nextLast  } })
-    .then(docs =>
-      {
-        return res.json({success: true, records: docs});
-      })
-    .catch(err =>
-      {
-        return res.json({success: false, message: err});
-      });
-});
 
 // Get the first 10 records that match the search
 router.get('/records/search/:value', (req, res, next) =>

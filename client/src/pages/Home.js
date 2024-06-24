@@ -1,7 +1,7 @@
 import '../App.css';
 import { IoIosArrowRoundForward, IoIosArrowRoundBack } from "react-icons/io"
 import SearchBar from '../components/SearchBar';
-import Record from '../components/Record';
+import RecordRow from '../components/RecordRow';
 import { useState, useRef, useEffect } from 'react';
 
 const Home = () =>
@@ -245,14 +245,7 @@ const Home = () =>
                       {
                         recordsToDisplay.map((recordRow, index) => 
                         (
-                          <div className='RecordListRow' key={index}>
-                            {
-                              recordRow.map((record) =>
-                              (
-                                <Record artist={record.artist} title={record.title} number={record.number} key={record._id} image={record.image} contentType={record.contentType} />
-                              ))
-                            }
-                          </div>
+                          <RecordRow recordRow={recordRow} key={index} />
                         ))
                       }
                     </div>

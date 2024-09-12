@@ -106,7 +106,7 @@ const SearchBar = (props) =>
   }, [showResults, filteredRecords, clearSearch]);
 
   return (
-    <div className='SearchBarBackground'>
+    <div className='SearchBarBackground' >
       <div className='SearchBarInputArea'>
         <IoIosSearch className='SearchBarIcon' />
         <input type='text' className='SearchBarInput' onChange={handleSearchChange} onKeyDown={handleKeyDown} value={search} placeholder='Search for artists' />

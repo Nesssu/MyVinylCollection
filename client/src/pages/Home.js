@@ -218,20 +218,31 @@ const Home = () =>
 
         <h4 className='HomeTitle'>MY VINYL COLLECTION</h4>
 
-        <div className="CollectionBackground">
-          <div className='SearchBar'>
-            <div className='HorizontalLineForSearchBar' />
-            <div style={{display: "flex", flexDirection: "row", width: "100%", position: "relative"}}>
-              <div className='VerticalLineForSearchBar' style={{left: "0"}} />
-              <SearchBar records={records} searchBarOnClick={searchBarOnClick} searchBarSearch={searchBarSearch} allowSearchClear={allowSearchClear} setAllowSearchClear={setAllowSearchClear} />
-              <div className='VerticalLineForSearchBar' style={{right: "0"}} />
-            </div>
-            <div className='HorizontalLineForSearchBar' />
+        <div className='SearchBar'>
+          <div className='HorizontalLineForSearchBar' />
+          <div style={{display: "flex", flexDirection: "row", width: "100%", position: "relative"}}>
+            <div className='VerticalLineForSearchBar' style={{left: "0"}} />
+            <SearchBar 
+              records={records} 
+              searchBarOnClick={searchBarOnClick} 
+              searchBarSearch={searchBarSearch} 
+              allowSearchClear={allowSearchClear} 
+              setAllowSearchClear={setAllowSearchClear}
+            />
+            <div className='VerticalLineForSearchBar' style={{right: "0"}} />
           </div>
+          <div className='HorizontalLineForSearchBar' />
+        </div>
+
+        <div className='BackToTopButtonArea'>
+          <p>Back to Top</p>
+        </div>
+
+        <div className="CollectionBackground">
 
           { loading ?
             (
-              <div style={{margin: "200px 0 0 0"}}>
+              <div>
                 {/* TODO: Loading animation */}
                 <p>Loading...</p>
               </div>
@@ -245,14 +256,14 @@ const Home = () =>
                       {
                         recordsToDisplay.map((recordRow, index) => 
                         (
-                          <RecordRow recordRow={recordRow} key={index} />
+                          <RecordRow recordRow={recordRow} key={index} index={index} />
                         ))
                       }
                     </div>
                   )
                   :
                   (
-                    <div style={{width: "100%", display: "flex", justifyContent: "center", margin: "30vh 0 0 0"}}>
+                    <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
                       <p>{"If you see this message there is an issue with the website, because me not having records is impossible!"}</p>
                     </div>
                   )

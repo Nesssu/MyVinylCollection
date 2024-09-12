@@ -551,12 +551,13 @@ p
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
   min-width: 100vw;  
+  max-height: 100vh;
   position: relative;
   margin: 0;
   padding: 0;
+  overflow: hidden;
 }
 
 .CollectionBackground
@@ -564,9 +565,12 @@ p
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
+  position: absolute;
+  padding: 60vh;
   width: 100vw;
   height: 100%;
+  overflow: scroll;
+  pointer-events: none;
 }
 
 .Header 
@@ -690,7 +694,7 @@ p
   align-items: center;
   justify-content: center;
   position: absolute;
-  margin: 20px 0 0 0;
+  margin: 40vh 0 0 0;
   padding: 10px;
   width: 75%;
   min-width: 100px;
@@ -708,6 +712,7 @@ p
   height: 2px;
   background-color: #102820;
   width: calc(100% + 30%);
+  transition: all 0.25s;
 }
 
 .VerticalLineForSearchBar
@@ -719,6 +724,7 @@ p
   top: 50%;
   margin: auto;
   transform: translateY(-50%);
+  transition: all 0.25s;
 }
 
 .SearchBarBackground
@@ -758,7 +764,6 @@ p
   text-decoration: underline;
 }
 
-
 .SearchBarInput
 {
   width: 100%;
@@ -775,6 +780,20 @@ p
   color: #102820;
 }
 
+.BackToTopButtonArea
+{
+  position: absolute;
+  bottom: 10vh;
+  right: auto;
+  left: auto;
+}
+
+.BackToTopButtonArea p
+{
+  color: #CABA9C;
+  font-size: large;
+}
+
 .RecordBackground
 {
   position: relative;
@@ -789,6 +808,7 @@ p
   border: none;
   border-radius: 2px;
   overflow: hidden;
+  transition: all 0.5s;
 }
 
 .RecordInfoArea {
@@ -829,19 +849,28 @@ p
   display: flex;
   flex-direction: column;
   justify-items: center;
-  margin: 200px 0 0 0;
   width: 100%;
   height: 100%;
+  pointer-events: all;
 }
 
 .RecordListRow
 {
   background-color: #123524;
   display: flex;
+  position: relative;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
   margin: 0 0 200px 0;
   padding: 50px 0 50px 0;
   transition: all 0.75s;
+}
+
+.RowIndex
+{
+  color: #CABA9C;
+  position: absolute;
+  left: 0;
+  bottom: 0;
 }

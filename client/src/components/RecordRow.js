@@ -40,6 +40,7 @@ const RecordRow = (props) =>
           <Record artist={record.artist} title={record.title} number={record.number} key={record._id} image={record.image} contentType={record.contentType} />
         ))
       }
+      <p className='RowIndex'>Row No. {props.index + 1}</p>
     </div>
   )
 }

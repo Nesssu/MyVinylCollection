@@ -6,6 +6,7 @@ const RecordRow = (props) =>
 {
   const [isVisible, setIsVisible] = useState(true);
   const elementRef = useRef(null);
+  const isNotLastRow = props.amountOfRows !== props.index + 1;
 
 
   useEffect(() => {
@@ -33,14 +34,25 @@ const RecordRow = (props) =>
   }, []);
 
   return(
-    <div className="RecordListRow" ref={elementRef} style={{opacity: isVisible ? '1' : '0'}}>
+    <div>
+      <div className="RecordListRow" ref={elementRef} style={{opacity: isVisible ? '1' : '0'}}>
+        {
+          props.recordRow.map((record) =>
+          (
+            <Record artist={record.artist} title={record.title} number={record.number} key={record._id} image={record.image} contentType={record.contentType} />
+          ))
+        }
+        <p className='RowIndex'>Row No. {props.index + 1}</p>
+      </div>
+
       {
-        props.recordRow.map((record) =>
+        isNotLastRow &&
         (
-          <Record artist={record.artist} title={record.title} number={record.number} key={record._id} image={record.image} contentType={record.contentType} />
-        ))
+          <div className='RecordRowDivider'>
+            <div className='RecordRowDividerIMG' />
+          </div>
+        )
       }
-      <p className='RowIndex'>Row No. {props.index + 1}</p>
     </div>
   )
 }

@@ -553,11 +553,11 @@ p
   align-items: center;
   text-align: center;
   min-width: 100vw;  
-  max-height: 100vh;
   position: relative;
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 .CollectionBackground
@@ -565,12 +565,8 @@ p
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
-  padding: 60vh;
   width: 100vw;
   height: 100%;
-  overflow: scroll;
-  pointer-events: none;
 }
 
 .Header 
@@ -582,6 +578,11 @@ p
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.HeaderIcon
+{
+  font-size: x-large;
 }
 
 .Header h1
@@ -693,8 +694,6 @@ p
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  margin: 40vh 0 0 0;
   padding: 10px;
   width: 75%;
   min-width: 100px;
@@ -781,17 +780,25 @@ p
 }
 
 .BackToTopButtonArea
-{
-  position: absolute;
-  bottom: 10vh;
-  right: auto;
-  left: auto;
+{  
+  margin: 0 0 50px 0;
 }
 
-.BackToTopButtonArea p
+.BackToTopButtonArea h2
 {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Fraunces', serif;
   color: #CABA9C;
   font-size: large;
+  font-weight: 900;
+}
+
+.BackToTopButtonArea:hover
+{
+  cursor: pointer;
 }
 
 .RecordBackground
@@ -826,7 +833,7 @@ p
 
 .RecordInfoArea p
 {
-  color: #e1e1e1;
+  color: #4D2D18;
   font-size: large;
   font-weight: 900;
 }
@@ -862,7 +869,7 @@ p
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  margin: 0 0 200px 0;
+  margin: 25px 0 25px 0;
   padding: 50px 0 50px 0;
   transition: all 0.75s;
 }
@@ -873,4 +880,24 @@ p
   position: absolute;
   left: 0;
   bottom: 0;
+}
+
+.RecordRowDivider
+{
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.RecordRowDividerIMG
+{
+  width: 80%;
+  max-width: 1000px;
+  height: 150px;
+  background-image: url('../src/media/RecordRowDivider.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }

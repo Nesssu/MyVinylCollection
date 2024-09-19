@@ -1,5 +1,5 @@
 import '../App.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const Record = (props) =>
 {
@@ -7,8 +7,8 @@ const Record = (props) =>
 
   return (
     <div className='RecordBackground' onMouseEnter={() => setHovering(true)} onMouseLeave={() => setHovering(false)}>
-      <div className='RecordImage' style={{backgroundImage: `url(data:${props.contentType};base64,${props.image})`, filter: hovering && 'blur(10px)'}}/>                                                                       
-      <div className='RecordInfoArea' style={{opacity: hovering ? '1' : '0' }}>
+      <div className='RecordImage' style={{backgroundImage: `url(data:${props.contentType};base64,${props.image})`}}/>                                                                       
+      <div className='RecordInfoArea' style={{opacity: hovering ? '1' : '0', backgroundColor: "#CABA9C" }}>
         <p># {props.number}</p>
         <p>{props.artist}</p>
         <div style={{width: "100%", display: "flex", justifyContent: "center", alignItems: "center"}} >

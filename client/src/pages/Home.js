@@ -1,5 +1,5 @@
 import '../App.css';
-import { IoIosArrowRoundForward, IoIosArrowRoundBack } from "react-icons/io"
+import { IoIosArrowRoundForward, IoIosArrowRoundBack, IoIosArrowRoundUp  } from "react-icons/io"
 import SearchBar from '../components/SearchBar';
 import RecordRow from '../components/RecordRow';
 import { useState, useRef, useEffect } from 'react';
@@ -166,7 +166,6 @@ const Home = () =>
 
   useState(() =>
   {
-    console.log("Update ran!");
     setLoading(true);
     fetchRecords();
 
@@ -234,10 +233,6 @@ const Home = () =>
           <div className='HorizontalLineForSearchBar' />
         </div>
 
-        <div className='BackToTopButtonArea'>
-          <p>Back to Top</p>
-        </div>
-
         <div className="CollectionBackground">
 
           { loading ?
@@ -256,7 +251,7 @@ const Home = () =>
                       {
                         recordsToDisplay.map((recordRow, index) => 
                         (
-                          <RecordRow recordRow={recordRow} key={index} index={index} />
+                          <RecordRow recordRow={recordRow} key={index} index={index} amountOfRows={recordsToDisplay.length} />
                         ))
                       }
                     </div>
@@ -273,6 +268,11 @@ const Home = () =>
           }
 
         </div>
+
+        <div className='BackToTopButtonArea' onClick={() => { scrollToRef(homeRef); }}>
+          <h2><IoIosArrowRoundUp className='HeaderIcon' /> Back to top</h2>
+        </div>
+
       </div>
 
 

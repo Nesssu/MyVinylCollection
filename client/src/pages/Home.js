@@ -4,6 +4,7 @@ import { IoIosArrowRoundForward, IoIosArrowRoundBack, IoIosArrowRoundUp, IoIosSe
 import { RxCross1 } from "react-icons/rx";
 import RecordRow from '../components/RecordRow';
 import { useState, useRef, useEffect } from 'react';
+import { Tooltip } from 'react-tooltip'
 
 const Home = () =>
 {
@@ -17,7 +18,7 @@ const Home = () =>
   const [records, setRecords] = useState([]);
   const [recordsToDisplay, setRecordsToDisplay] = useState([]);
   const [disableScroll, setDisableScroll] = useState(false);
-  const [allowSearchClear, setAllowSearchClear] = useState(false);
+  const [searchBarValue, setSearchBarValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [update, setUpdate] = useState(false);
 
@@ -29,28 +30,6 @@ const Home = () =>
       currentRef.current = ref.current;
       sessionStorage.setItem('my_vinyl_collection_ref', ref.current.className);
     }
-  }
-
-  const searchBarOnClick = (artist) =>
-  {
-    let temp = [];
-
-    for (let i = 0; i < records.length; i++)
-    {
-      if (records[i].artist === artist)
-      {
-        temp.push(records[i]);
-      }
-    }
-
-    setRecordsToDisplay(temp);
-    setAllowSearchClear(true);
-  }
-
-  const searchBarSearch = (filteredList) =>
-  {
-    setRecordsToDisplay(filteredList);
-    setAllowSearchClear(true);
   }
 
   const GetGroupSizeBasedOnWindowWidth = () =>
@@ -165,6 +144,30 @@ const Home = () =>
     }
   }
 
+  useEffect(() =>
+  {
+    setLoading(true);
+    const groupSize = GetGroupSizeBasedOnWindowWidth();
+
+    if (searchBarValue !== "")
+    {
+      let temp = [];
+      records.forEach((record) => 
+        { 
+          if (record.artist.toLowerCase().includes(searchBarValue.toLowerCase()))
+          {
+            temp.push(record);
+          }
+        }
+      );
+
+      DivideRecordsIntoGroupsOfNumFromList(groupSize, temp);
+      return;
+    }
+
+    DivideRecordsIntoGroupsOfNumFromList(groupSize, records);
+  }, [searchBarValue]);
+
   useState(() =>
   {
     setLoading(true);
@@ -223,8 +226,11 @@ const Home = () =>
           <div className='SearchBarInputArea'>
             <div className='SearchBarVerticalLine' />
             <div className='SearchBarInputBackground'>
-              <IoIosSearch className='SearchBarIcon' />
-              <input className='SearchBarInput' placeholder='Search for artists' />
+              { searchBarValue === "" ? <IoIosSearch className='SearchBarIcon' /> : <RxCross1 className='SearchBarIcon ClearSearchButton' onClick={() => setSearchBarValue("")} /> }
+              <Tooltip anchorSelect='.ClearSearchButton' place='top'>
+                Clear the search
+              </Tooltip>
+              <input className='SearchBarInput' placeholder='Search for artists' value={searchBarValue} onChange={(event) => setSearchBarValue(event.target.value)} />
             </div>
             <div className='SearchBarVerticalLine' />
           </div>

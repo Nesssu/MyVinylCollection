@@ -47,6 +47,12 @@
 {
   color: #102820;
   font-size: x-large;
+  margin: 0 5px 0 0;
+}
+
+.ClearSearchButton:hover
+{
+    cursor: pointer;
 }
 
 .SearchBarInput

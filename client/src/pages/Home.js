@@ -1,6 +1,7 @@
 import '../App.css';
-import { IoIosArrowRoundForward, IoIosArrowRoundBack, IoIosArrowRoundUp  } from "react-icons/io"
-import SearchBar from '../components/SearchBar';
+import '../pages/SearchBarStyle.css';
+import { IoIosArrowRoundForward, IoIosArrowRoundBack, IoIosArrowRoundUp, IoIosSearch } from "react-icons/io"
+import { RxCross1 } from "react-icons/rx";
 import RecordRow from '../components/RecordRow';
 import { useState, useRef, useEffect } from 'react';
 
@@ -217,20 +218,17 @@ const Home = () =>
 
         <h4 className='HomeTitle'>MY VINYL COLLECTION</h4>
 
-        <div className='SearchBar'>
-          <div className='HorizontalLineForSearchBar' />
-          <div style={{display: "flex", flexDirection: "row", width: "100%", position: "relative"}}>
-            <div className='VerticalLineForSearchBar' style={{left: "0"}} />
-            <SearchBar 
-              records={records} 
-              searchBarOnClick={searchBarOnClick} 
-              searchBarSearch={searchBarSearch} 
-              allowSearchClear={allowSearchClear} 
-              setAllowSearchClear={setAllowSearchClear}
-            />
-            <div className='VerticalLineForSearchBar' style={{right: "0"}} />
+        <div className='SearchBarArea'>
+          <div className='SearchBarHorizontalLine' />
+          <div className='SearchBarInputArea'>
+            <div className='SearchBarVerticalLine' />
+            <div className='SearchBarInputBackground'>
+              <IoIosSearch className='SearchBarIcon' />
+              <input className='SearchBarInput' placeholder='Search for artists' />
+            </div>
+            <div className='SearchBarVerticalLine' />
           </div>
-          <div className='HorizontalLineForSearchBar' />
+          <div className='SearchBarHorizontalLine' />
         </div>
 
         <div className="CollectionBackground">

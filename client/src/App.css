@@ -54,6 +54,12 @@ p
   color: black;
 }
 
+.IDontHaveAnyRecordsP
+{
+  font-size: large;
+  color: #102820;
+}
+
 .Hover
 {
   cursor: pointer;

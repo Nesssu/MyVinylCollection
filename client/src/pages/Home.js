@@ -261,20 +261,24 @@ const Home = () =>
                     </div>
                   )
                   :
-                  (
-                    <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
-                      <p>{"If you see this message there is an issue with the website, because me not having records is impossible!"}</p>
-                    </div>
+                  ( searchBarValue === "" ?
+                    (
+                      <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
+                        <p className='IDontHaveAnyRecordsP'>{"If you see this message, there is an issue with the website.😯 Me not having records is impossible!! 😜"}</p>
+                      </div>
+                    )
+                    :
+                    (
+                      <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
+                        <p className='IDontHaveAnyRecordsP'>I don't have any records from <span style={{textDecoration: "underline"}}>{searchBarValue}</span>!! 🥺</p>
+                      </div>
+                    )
                   )
                 }
               </div>
             )
           }
 
-        </div>
-
-        <div className='BackToTopButtonArea' onClick={() => { scrollToRef(homeRef); }}>
-          <h2><IoIosArrowRoundUp className='HeaderIcon' /> Back to top</h2>
         </div>
 
       </div>
@@ -298,7 +302,7 @@ const Home = () =>
             started to collect records during the summer of 2022 and I quickly had quite a lot. 
             This website allows me to keep track of them and it also helps my family members 
             to know which records I have and which records they could possibly give me as 
-            presents. 🥰
+            presents. 🥰😘
           </p>
           <p className='AboutText PortfolioLinkText'>
             If you want to see my other projects, here's a link to my portfolio...

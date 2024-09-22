@@ -329,7 +329,7 @@ const Home = () =>
 
         </div>
 
-        { recordsToDisplay.length > 0 &&
+        { recordsToDisplay.length > 2 &&
           <UnderlinedButton title="Back to Top" color="#CABA9C" position="center" buttonOnClick={backToTopOnClick} />
         }
 

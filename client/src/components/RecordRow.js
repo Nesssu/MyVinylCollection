@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 const RecordRow = (props) =>
 {
   const elementRef = useRef(null);
-  const isNotLastRow = props.amountOfRows !== props.index + 1;
+  const isNotLastRow = props.amountOfRows !== props.index + 1 || props.amountOfRows < 3;
 
   return (
     <div>

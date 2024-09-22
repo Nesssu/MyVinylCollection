@@ -1,10 +1,14 @@
 import '../App.css';
 import '../pages/SearchBarStyle.css';
-import { IoIosArrowRoundForward, IoIosArrowRoundBack, IoIosArrowRoundUp, IoIosSearch } from "react-icons/io"
+import { IoIosArrowRoundForward, IoIosArrowRoundBack, IoIosSearch } from "react-icons/io"
 import { RxCross1 } from "react-icons/rx";
+import { FaRegCopyright } from "react-icons/fa";
 import RecordRow from '../components/RecordRow';
 import { useState, useRef, useEffect } from 'react';
 import { Tooltip } from 'react-tooltip'
+import { Modal } from '@mui/material';
+import '../components/RecordModalStyle.css';
+import UnderlinedButton from '../components/UnderlinedButton.js';
 
 const Home = () =>
 {
@@ -20,7 +24,8 @@ const Home = () =>
   const [disableScroll, setDisableScroll] = useState(false);
   const [searchBarValue, setSearchBarValue] = useState("");
   const [loading, setLoading] = useState(false);
-  const [update, setUpdate] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [selectedRecordForModal, setSelectedRecordForModal] = useState(null);
 
   const scrollToRef = (ref) =>
   {
@@ -30,6 +35,43 @@ const Home = () =>
       currentRef.current = ref.current;
       sessionStorage.setItem('my_vinyl_collection_ref', ref.current.className);
     }
+  }
+
+  const backToTopOnClick = () =>
+  {
+    scrollToRef(homeRef);
+  }
+
+  const toAboutOnClick = () =>
+  {
+    scrollToRef(aboutRef);
+    setDisableScroll(true);
+  }
+
+  const toHomeOnClick = () =>
+  {
+    scrollToRef(homeRef);
+    setDisableScroll(false);
+  }
+
+  const handleRecordClick = (isTouchDevice, number) =>
+    {
+      if (!isTouchDevice) return;
+      
+      records.forEach((record) =>
+        {
+          if (record.number === number)
+          {
+            setSelectedRecordForModal(record);
+          }
+        }
+      );
+    }
+  
+  const handleModalClose = () =>
+  {
+    setOpen(false);
+    setSelectedRecordForModal(null);
   }
 
   const GetGroupSizeBasedOnWindowWidth = () =>
@@ -69,7 +111,7 @@ const Home = () =>
           temp = [];
         }
 
-        if (listOfRecords.indexOf(record) == listOfRecords.length - 1 && temp.length != 0)
+        if (listOfRecords.indexOf(record) === listOfRecords.length - 1 && temp.length !== 0)
         {
           newList.push(temp);
         }
@@ -93,7 +135,7 @@ const Home = () =>
     const widthOfWindow = window.innerWidth;
 
 
-    const noRecordsAvailable = recordsToDisplay.length == 0 || records.length == 0;
+    const noRecordsAvailable = recordsToDisplay.length === 0 || records.length === 0;
 
     if (noRecordsAvailable)
     {
@@ -168,7 +210,7 @@ const Home = () =>
     DivideRecordsIntoGroupsOfNumFromList(groupSize, records);
   }, [searchBarValue]);
 
-  useState(() =>
+  useEffect(() =>
   {
     setLoading(true);
     fetchRecords();
@@ -200,12 +242,18 @@ const Home = () =>
         window.removeEventListener("resize", handleResize);
     }
     
-  }, [update]);
+  }, []);
 
   useEffect(() =>
   {
     document.body.style.overflowY = disableScroll ? "hidden" : "scroll";
   }, [disableScroll]);
+
+  useEffect(() =>
+  {
+    if (selectedRecordForModal === null) return;
+    setOpen(true);
+  }, [selectedRecordForModal]);
 
   return (
     <div className="Home" style={{backgroundColor: disableScroll ? background_AboutPage : background_HomePage}}>
@@ -215,8 +263,8 @@ const Home = () =>
 
 
       <div className='VinylCollection' ref={homeRef}>
-        <div className="Header">
-          <h2 className='HomeHeaderLink' onClick={() => { scrollToRef(aboutRef); setDisableScroll(true); }} >About <IoIosArrowRoundForward className='HeaderIcon' /></h2>
+        <div className="HomeHeader">
+          <UnderlinedButton title="About" color="#CABA9C" position="start" buttonOnClick={toAboutOnClick} />
         </div>
 
         <h4 className='HomeTitle'>MY VINYL COLLECTION</h4>
@@ -255,7 +303,7 @@ const Home = () =>
                       {
                         recordsToDisplay.map((recordRow, index) => 
                         (
-                          <RecordRow recordRow={recordRow} key={index} index={index} amountOfRows={recordsToDisplay.length} />
+                          <RecordRow recordRow={recordRow} key={index} index={index} amountOfRows={recordsToDisplay.length} handleRecordClick={handleRecordClick} />
                         ))
                       }
                     </div>
@@ -281,6 +329,35 @@ const Home = () =>
 
         </div>
 
+        <UnderlinedButton title="Back to Top" color="#CABA9C" position="center" buttonOnClick={backToTopOnClick} />
+
+        <div className='FooterArea'>
+          <FaRegCopyright className='FooterIcon' />
+          <p className='FooterP'>2024 All Rights Reserved</p>
+        </div>
+
+        { selectedRecordForModal !== null &&
+          <Modal
+            open={open}
+            onClose={handleModalClose}
+            closeAfterTransition
+            disableAutoFocus={true}>
+            <div className='RecordModalBackground'>
+              <div className='ModalRecordImageArea'>
+                <div className='ModalRecordImage' style={{backgroundImage: `url(data:${selectedRecordForModal.contentType};base64,${selectedRecordForModal.image})`}}/>
+              </div>
+
+              <div className='ModalHorizontalSeparator' />
+
+              <div className='ModalRecordInfoArea'>
+                <p># {selectedRecordForModal.number}</p>
+                <p>{selectedRecordForModal.artist}</p>
+                <p>{selectedRecordForModal.title}</p>
+              </div>
+            </div>
+          </Modal>
+        }
+
       </div>
 
 
@@ -288,8 +365,8 @@ const Home = () =>
 
 
       <div className='About' ref={aboutRef}>
-        <div className="Header">
-          <h2 className='AboutHeaderLink' onClick={() =>  { scrollToRef(homeRef); setDisableScroll(false); }}><IoIosArrowRoundBack className='HeaderIcon' />Back</h2>
+        <div className="AboutHeader">
+          <UnderlinedButton title="Home" color="#4D2D18" position="end" buttonOnClick={toHomeOnClick} />
         </div>
 
         <h4 className='AboutTitle'>ABOUT</h4>
@@ -303,9 +380,6 @@ const Home = () =>
             This website allows me to keep track of them and it also helps my family members 
             to know which records I have and which records they could possibly give me as 
             presents. 🥰😘
-          </p>
-          <p className='AboutText PortfolioLinkText'>
-            If you want to see my other projects, here's a link to my portfolio...
           </p>
         </div>
       </div>

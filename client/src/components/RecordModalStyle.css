@@ -1,0 +1,59 @@
+.RecordModalBackground
+{
+    background-color: #CABA9C;
+    padding: 25px;
+    border-radius: 5px;
+    width: 75%;
+    max-width: 400px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.ModalRecordInfoArea
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.ModalRecordInfoArea p
+{
+    color: #4D2D18;
+    font-size: large;
+    font-weight: 900;
+}
+
+.ModalRecordImageArea
+{
+    width: 100%;
+}
+
+.ModalRecordImage
+{
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    border: none;
+    border-radius: 2px;
+    box-shadow: 0 0 5px #4D2D18;
+    background-size: cover;
+    background-position: center;
+    transition: all 0.5s;
+}
+
+.ModalHorizontalSeparator
+{
+    width: 95%;
+    height: 1px;
+    min-height: 1px;
+    background-color: #4D2D18;
+    margin: 15px 0 5px 0;
+}

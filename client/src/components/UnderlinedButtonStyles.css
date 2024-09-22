@@ -1,0 +1,26 @@
+.Underline
+{
+  width: 0%;
+  height: 2px;
+  margin: 0;
+  transition: all 0.25s;
+}
+
+.ButtonArea
+{
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0 50px 0;
+}
+
+.ButtonArea:hover
+{
+  cursor: pointer;
+}
+
+.ButtonArea h2
+{
+  font-size: large;
+  font-weight: 900;
+  padding: 0;
+}

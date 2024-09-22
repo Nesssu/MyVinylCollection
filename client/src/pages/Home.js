@@ -329,7 +329,9 @@ const Home = () =>
 
         </div>
 
-        <UnderlinedButton title="Back to Top" color="#CABA9C" position="center" buttonOnClick={backToTopOnClick} />
+        { recordsToDisplay.length > 0 &&
+          <UnderlinedButton title="Back to Top" color="#CABA9C" position="center" buttonOnClick={backToTopOnClick} />
+        }
 
         <div className='FooterArea'>
           <FaRegCopyright className='FooterIcon' />
